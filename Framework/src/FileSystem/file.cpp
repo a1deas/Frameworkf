@@ -1,6 +1,6 @@
 #include "file.h"
 #include <fstream>
-#include "spdlog/spdlog.h"
+#include "Core/log.h"
 
 
 namespace Ff
@@ -10,7 +10,7 @@ namespace Ff
 		std::ifstream fileObject(path);
 		if (!fileObject.is_open())
 		{
-			SPDLOG_CRITICAL("failed open file: {}", path);
+			FFCRIT("failed open file: {}", path);
 			abort();
 		}
 
@@ -25,7 +25,7 @@ namespace Ff
 		std::ofstream fileObject(path);
 		if(!fileObject.is_open())
 		{
-			SPDLOG_CRITICAL("failed open file: {}", path);
+			FFCRIT("failed open file: {}", path);
 			abort();
 		}
 
