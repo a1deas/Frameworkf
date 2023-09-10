@@ -15,7 +15,9 @@ target_compile_features(Frameworkf PUBLIC cxx_std_20)
 #Указываем всем проектам где искать хедера конкретно этой библиотеки
 target_include_directories(Frameworkf PUBLIC src)
 
-#Группируем Frameworkf в "папке" Main, которая будет видна только в вижуалке
+#Для организации группируем Frameworkf в "папке" Main, которая будет видна только в вижуалке
 set_target_properties(Frameworkf PROPERTIES 
 FOLDER Main
 )
+
+target_link_libraries(Frameworkf PUBLIC glfw glm spdlog)

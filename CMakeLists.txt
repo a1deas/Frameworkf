@@ -6,3 +6,4 @@ set_property(GLOBAL PROPERTY USE_FOLDERS TRUE)
 
 add_subdirectory(Framework)
 add_subdirectory(Testbed)
+add_subdirectory(Vendor)
