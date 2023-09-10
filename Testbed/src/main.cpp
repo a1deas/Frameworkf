@@ -1,6 +1,6 @@
 #include "framework.h"
 
-int main()
+void init()
 {
-	printInt(23);
+
 }
