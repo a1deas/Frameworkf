@@ -4,7 +4,6 @@
 
 namespace Ff
 {
-
 	Window::Window(int width, int height, const std::string& windowName)
 		: m_width(width)
 		, m_height(height)
@@ -20,7 +19,7 @@ namespace Ff
 			FFERROR("Failed to create GLFW window");
 			abort();
 		}
-
+		FFINFO("Created window");
 		glfwMakeContextCurrent(m_window);
 	}
 
