@@ -10,7 +10,7 @@ namespace Ff
 		std::ifstream fileObject(path);
 		if (!fileObject.is_open())
 		{
-			FFCRIT("failed open file: {}", path);
+			FFFATAL("failed open file: {}", path);
 			abort();
 		}
 
@@ -25,7 +25,7 @@ namespace Ff
 		std::ofstream fileObject(path);
 		if(!fileObject.is_open())
 		{
-			FFCRIT("failed open file: {}", path);
+			FFFATAL("failed open file: {}", path);
 			abort();
 		}
 
@@ -39,7 +39,7 @@ namespace Ff
 
 		if (!fileObject.is_open())
 		{
-			FFCRIT("failed open file: {}", path);
+			FFFATAL("failed open file: {}", path);
 			abort();
 		}
 
@@ -58,7 +58,7 @@ namespace Ff
 		
 		if (!fileObject.is_open())
 		{
-			FFCRIT("failed open file: {}", path);
+			FFFATAL("failed open file: {}", path);
 			abort();
 		}
 		

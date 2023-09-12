@@ -2,8 +2,23 @@
 
 #include "spdlog/spdlog.h"
 
-#define FFTRACE(...) SPDLOG_TRACE(__VA_ARGS__)
-#define FFINFO(...) SPDLOG_INFO(__VA_ARGS__)
-#define FFWARN(...) SPDLOG_WARN(__VA_ARGS__)
-#define FFERROR(...) SPDLOG_ERROR(__VA_ARGS__)
-#define FFCRIT(...) SPDLOG_CRITICAL(__VA_ARGS__)
+namespace Ff
+{
+	class Log
+	{
+	public:
+		Log(const std::string& loggerName);
+		
+		inline static std::shared_ptr<spdlog::logger>& getLogger() { return fLogger; }
+
+	private:
+		static std::shared_ptr<spdlog::logger> fLogger;
+	};
+}
+
+//Log macros
+#define FFTRACE(...)	Ff::Log::getLogger()->trace(__VA_ARGS__)
+#define FFINFO(...)		Ff::Log::getLogger()->info(__VA_ARGS__)
+#define FFWARN(...)		Ff::Log::getLogger()->warn(__VA_ARGS__)
+#define FFERROR(...)	Ff::Log::getLogger()->error(__VA_ARGS__)
+#define FFFATAL(...)	Ff::Log::getLogger()->critical(__VA_ARGS__)

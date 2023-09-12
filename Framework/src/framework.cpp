@@ -3,11 +3,13 @@
 
 #include "Platform/platform.h"
 #include "Platform/window.h"
+#include "Core/log.h"
 
 void init();
 
 int main()
 {
+	Ff::Log logger("Logger");
 	Ff::Platform platform;
 	Ff::Window window(800, 600, "Frameworkf");
 
