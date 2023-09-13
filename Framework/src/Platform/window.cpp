@@ -1,6 +1,7 @@
 #include "window.h"
 #include "GLFW/glfw3.h"
 #include "Core/log.h"
+#include "EventSystem/mouseEvent.h"
 
 namespace Ff
 {
@@ -13,6 +14,11 @@ namespace Ff
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+		setFunctionCallback([](Event& event)
+			{
+				FFINFO("{}: Triggered: {}", event.getEventStr(), event.eventFormat());
+			});
+
 		m_window = glfwCreateWindow(m_width, m_height, m_windowName.c_str(), nullptr, nullptr);
 		if (m_window == nullptr)
 		{
@@ -21,6 +27,11 @@ namespace Ff
 		}
 		FFINFO("Created window");
 		glfwMakeContextCurrent(m_window);
+		glfwSetWindowUserPointer(m_window, this);
+		
+		glfwSetCursorPosCallback(m_window, mouseMovedCallback);
+		glfwSetScrollCallback(m_window, mouseScrolledCallback);
+
 	}
 
 	Window::~Window()
@@ -37,6 +48,21 @@ namespace Ff
 	void Window::swapBuffers()
 	{
 		glfwSwapBuffers(m_window);
+	}
+
+	void Window::mouseMovedCallback(GLFWwindow* window, double x, double y)
+	{
+		// *
+		auto& handle = *(Window*)glfwGetWindowUserPointer(window);
+		MouseMovedEvent event(x, y);
+		handle.functionCallback(event);
+	}
+
+	void Window::mouseScrolledCallback(GLFWwindow* window, double x, double y)
+	{
+		auto& handle = *(Window*)glfwGetWindowUserPointer(window);
+		MouseScrolledEvent event(y);
+		handle.functionCallback(event);
 	}
 
 }

@@ -1,7 +1,10 @@
 #pragma once
 
 #include "GLFW/glfw3.h"
+#include "EventSystem/event.h"
+
 #include <string>
+#include <functional>
 
 namespace Ff
 {
@@ -15,10 +18,15 @@ namespace Ff
 
 		void swapBuffers();
 	
+		static void mouseMovedCallback(GLFWwindow* window, double x, double y);
+		static void mouseScrolledCallback(GLFWwindow* window, double x, double y);
+
+		void setFunctionCallback(const std::function<void(Event&)>& function) { functionCallback = function; }
 	private:
 		GLFWwindow* m_window;
 		int m_width;
 		int m_height;
 		std::string m_windowName;
+		std::function<void(Event&)> functionCallback;
 	};
 }
