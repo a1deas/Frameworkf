@@ -20,6 +20,11 @@ namespace Ff
 	
 		static void mouseMovedCallback(GLFWwindow* window, double x, double y);
 		static void mouseScrolledCallback(GLFWwindow* window, double x, double y);
+		static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mode);
+
+		static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+
 
 		void setFunctionCallback(const std::function<void(Event&)>& function) { functionCallback = function; }
 	private:

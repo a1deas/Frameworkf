@@ -17,9 +17,9 @@ namespace Ff
 			MOUSE_MOVED_EVENT,
 			MOUSE_SCROLLED_EVENT,
 
+			KEY_PRESSED_EVENT,
 			KEY_RELEASED_EVENT,
 			KEY_REPEATED_EVENT,
-			KEY_PRESSED_EVENT,
 
 			WINDOW_RESIZE_EVENT,
 			WINDOW_CLOSED_EVENT,
@@ -39,7 +39,7 @@ namespace Ff
 
 		inline EventType getType() const { return m_type; }
 
-		constexpr std::string_view getEventStr()
+		constexpr std::string_view getEventStr() const 
 		{
 			switch (m_type)
 			{

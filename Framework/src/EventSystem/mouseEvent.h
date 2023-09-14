@@ -7,7 +7,7 @@ namespace Ff
 	class MouseMovedEvent : public Event
 	{
 	public:
-		MouseMovedEvent(int x, int y)
+		MouseMovedEvent(float x, float y)
 			: Event(Event::EventType::MOUSE_MOVED_EVENT)
 			, m_x(x)
 			, m_y(y)
@@ -18,7 +18,7 @@ namespace Ff
 		std::string eventFormat() const override { return std::format("x: {}, y: {}", m_x, m_y); }
 
 	private:
-		int m_x, m_y;
+		float m_x, m_y;
 	};
 
 	class MouseScrolledEvent : public Event
@@ -35,5 +35,35 @@ namespace Ff
 	private:
 		double m_offset;
 
+	};
+
+	class MouseButtonPressed : public Event
+	{
+	public:
+		MouseButtonPressed(float button)
+			: Event(Event::EventType::MOUSE_BUTTON_PRESSED_EVENT)
+			, m_button(button)
+		{
+
+		}
+		
+		std::string eventFormat() const override { return std::format("button: {}", m_button); }
+	private:
+		float m_button;
+	};
+
+	class MouseButtonReleased : public Event
+	{
+	public:
+		MouseButtonReleased(float button)
+			: Event(Event::EventType::MOUSE_BUTTON_RELEASED_EVENT)
+			, m_button(button)
+		{
+
+		}
+
+		std::string eventFormat() const override { return std::format("button: {}", m_button); }
+	private:
+		float m_button;
 	};
 }

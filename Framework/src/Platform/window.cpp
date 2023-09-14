@@ -2,6 +2,7 @@
 #include "GLFW/glfw3.h"
 #include "Core/log.h"
 #include "EventSystem/mouseEvent.h"
+#include "EventSystem/keyboardEvent.h"
 
 namespace Ff
 {
@@ -14,7 +15,7 @@ namespace Ff
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		setFunctionCallback([](Event& event)
+		setFunctionCallback([](const Event& event)
 			{
 				FFINFO("{}: Triggered: {}", event.getEventStr(), event.eventFormat());
 			});
@@ -31,7 +32,9 @@ namespace Ff
 		
 		glfwSetCursorPosCallback(m_window, mouseMovedCallback);
 		glfwSetScrollCallback(m_window, mouseScrolledCallback);
+		glfwSetMouseButtonCallback(m_window, mouseButtonCallback);
 
+		glfwSetKeyCallback(m_window, keyCallback);
 	}
 
 	Window::~Window()
@@ -52,7 +55,6 @@ namespace Ff
 
 	void Window::mouseMovedCallback(GLFWwindow* window, double x, double y)
 	{
-		// *
 		auto& handle = *(Window*)glfwGetWindowUserPointer(window);
 		MouseMovedEvent event(x, y);
 		handle.functionCallback(event);
@@ -65,4 +67,46 @@ namespace Ff
 		handle.functionCallback(event);
 	}
 
+	void Window::mouseButtonCallback(GLFWwindow* window, int button, int action, int mode)
+	{
+		auto& handle = *(Window*)glfwGetWindowUserPointer(window);
+		
+		if (action == GLFW_PRESS)
+		{
+			MouseButtonPressed event(button);
+			handle.functionCallback(event);
+		}
+		else
+		{
+			MouseButtonReleased event(button);
+			handle.functionCallback(event);
+		}
+	}
+
+	void Window::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+	{
+		auto& handle = *(Window*)glfwGetWindowUserPointer(window);
+		
+		switch (action)
+		{
+			case GLFW_PRESS:
+			{
+				KeyPressedEvent event(static_cast<Key>(key));
+				handle.functionCallback(event);
+				break;
+			}
+			case GLFW_RELEASE:
+			{
+				KeyReleasedEvent event(static_cast<Key>(key));
+				handle.functionCallback(event);
+				break;
+			}
+			case GLFW_REPEAT:
+			{
+				KeyRepeatedEvent event(static_cast<Key>(key));
+				handle.functionCallback(event);
+				break;
+			}
+		}
+	}
 }
