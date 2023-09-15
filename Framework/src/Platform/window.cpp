@@ -3,6 +3,7 @@
 #include "Core/log.h"
 #include "EventSystem/mouseEvent.h"
 #include "EventSystem/keyboardEvent.h"
+#include "EventSystem/windowEvent.h"
 
 namespace Ff
 {
@@ -35,6 +36,9 @@ namespace Ff
 		glfwSetMouseButtonCallback(m_window, mouseButtonCallback);
 
 		glfwSetKeyCallback(m_window, keyCallback);
+
+		glfwSetWindowSizeCallback(m_window, windowResizeCallback);
+		glfwSetWindowCloseCallback(m_window, windowCloseCallback);
 	}
 
 	Window::~Window()
@@ -109,4 +113,21 @@ namespace Ff
 			}
 		}
 	}
+
+	void Window::windowResizeCallback(GLFWwindow* window, int new_width, int new_height)
+	{
+		auto& handle = *(Window*)glfwGetWindowUserPointer(window);
+		WindowResizedEvent event(new_width, new_height);
+		handle.m_width = new_width;
+		handle.m_height = new_height;
+		handle.functionCallback(event);
+	}
+
+	void Window::windowCloseCallback(GLFWwindow* window)
+	{
+		auto& handle = *(Window*)glfwGetWindowUserPointer(window);
+		WindowCloseEvent event;
+		handle.functionCallback(event);
+	}
+
 }

@@ -23,7 +23,9 @@ namespace Ff
 		static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mode);
 
 		static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-
+		
+		static void windowResizeCallback(GLFWwindow* window, int width, int height);
+		static void windowCloseCallback(GLFWwindow* window);
 
 
 		void setFunctionCallback(const std::function<void(Event&)>& function) { functionCallback = function; }
