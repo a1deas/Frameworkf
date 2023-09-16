@@ -20,9 +20,15 @@ namespace Ff
 			KEY_PRESSED_EVENT,
 			KEY_RELEASED_EVENT,
 			KEY_REPEATED_EVENT,
+			TEXT_INPUT_EVENT,
 
 			WINDOW_RESIZE_EVENT,
 			WINDOW_CLOSED_EVENT,
+			WINDOW_POSITION_EVENT,
+			WINDOW_FOCUS_EVENT,
+			WINDOW_ICONIFY_EVENT,
+			WINDOW_MAXIMIZE_EVENT,
+			CURSOR_ENTER_EVENT,
 		};
 
 	protected:
@@ -57,10 +63,22 @@ namespace Ff
 					return "KEY_REPEATED";
 				case EventType::KEY_PRESSED_EVENT:
 					return "KEY_PRESSED";
+				case EventType::TEXT_INPUT_EVENT:
+					return "TEXT_INPUT";
 				case EventType::WINDOW_RESIZE_EVENT:
 					return "WINDOW_RESIZE";
 				case EventType::WINDOW_CLOSED_EVENT:
 					return "WINDOW_CLOSED";
+				case EventType::WINDOW_POSITION_EVENT:
+					return "WINDOW_POS";
+				case EventType::WINDOW_FOCUS_EVENT:
+					return "WINDOW_FOCUS";
+				case EventType::WINDOW_ICONIFY_EVENT:
+					return "WINDOW_ICONIFY";
+				case EventType::WINDOW_MAXIMIZE_EVENT:
+					return "WINDOW_MAXIMIZE";
+				case EventType::CURSOR_ENTER_EVENT:
+					return "CURSOR_ENTER";
 				default:
 					FFERROR("UNKNOWN EVENT");
 					return "UNKNOWN_EVENT";

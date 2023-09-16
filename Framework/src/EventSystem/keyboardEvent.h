@@ -18,7 +18,7 @@ namespace Ff
 
 		}
 
-		std::string eventFormat() const override { return std::format("key: {}", getKeyString(m_key)); }
+		virtual std::string eventFormat() const override { return std::format("key: {}", getKeyString(m_key)); }
 	private:
 		Key m_key;
 	};
@@ -52,5 +52,20 @@ namespace Ff
 		std::string eventFormat() const override { return std::format("key: {}", getKeyString(m_key)); }
 	private:
 		Key m_key;
+	};
+
+	class TextInputEvent : public Event
+	{
+	public:
+		TextInputEvent(unsigned int codepoint)
+			: Event(EventType::TEXT_INPUT_EVENT)
+			, m_codepoint(codepoint)
+		{
+
+		}
+
+		std::string eventFormat() const override { return std::format("text input: {}", static_cast<char>(m_codepoint)); }
+	private:
+		unsigned int m_codepoint;
 	};
 }
