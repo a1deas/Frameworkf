@@ -1,9 +1,9 @@
+#include "Core/log.h"
 #include <iostream>
 #include <format>
 
 #include "Platform/platform.h"
 #include "Platform/window.h"
-#include "Core/log.h"
 
 void init();
 

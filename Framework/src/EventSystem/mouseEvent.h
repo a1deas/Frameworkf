@@ -1,6 +1,7 @@
 #pragma once
 
 #include "event.h"
+#include "enumButton.h"
 
 namespace Ff
 {
@@ -15,7 +16,7 @@ namespace Ff
 		
 		}
 
-		std::string eventFormat() const override { return std::format("x: {}, y: {}", m_x, m_y); }
+		virtual std::string eventFormat() const override { return std::format("x: {}, y: {}", m_x, m_y); }
 
 	private:
 		float m_x, m_y;
@@ -31,7 +32,7 @@ namespace Ff
 
 		}
 
-		std::string eventFormat() const override { return std::format("offset: {}", m_offset); }
+		virtual std::string eventFormat() const override { return std::format("offset: {}", m_offset); }
 	private:
 		double m_offset;
 
@@ -40,30 +41,54 @@ namespace Ff
 	class MouseButtonPressed : public Event
 	{
 	public:
-		MouseButtonPressed(float button)
+		MouseButtonPressed(MouseButton button)
 			: Event(Event::EventType::MOUSE_BUTTON_PRESSED_EVENT)
 			, m_button(button)
 		{
 
 		}
 		
-		std::string eventFormat() const override { return std::format("button: {}", m_button); }
+		virtual std::string eventFormat() const override { return std::format("button: {}", getButtonString(m_button)); }
 	private:
-		float m_button;
+		MouseButton m_button;
 	};
 
 	class MouseButtonReleased : public Event
 	{
 	public:
-		MouseButtonReleased(float button)
+		MouseButtonReleased(MouseButton button)
 			: Event(Event::EventType::MOUSE_BUTTON_RELEASED_EVENT)
 			, m_button(button)
 		{
 
 		}
 
-		std::string eventFormat() const override { return std::format("button: {}", m_button); }
+		virtual std::string eventFormat() const override { return std::format("button: {}", getButtonString(m_button)); }
 	private:
-		float m_button;
+		MouseButton m_button;
+	};
+
+	class CursorEnterEvent : public Event
+	{
+	public:
+		CursorEnterEvent()
+			: Event(EventType::CURSOR_ENTER_EVENT)
+		{
+
+		}
+
+		virtual std::string eventFormat() const override { return std::format("Cursor entered"); }
+	};
+
+	class CursorLeftEvent : public Event
+	{
+	public:
+		CursorLeftEvent()
+			: Event(EventType::CURSOR_LEFT_EVENT)
+		{ 
+
+		}
+
+		virtual std::string eventFormat() const override { return std::format("Cursor left"); }
 	};
 }

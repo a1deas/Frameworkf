@@ -1,4 +1,5 @@
 #pragma once
+
 #include "event.h"
 
 namespace Ff
@@ -14,7 +15,7 @@ namespace Ff
 
 		}
 
-		std::string eventFormat() const override { return std::format("Window resize({}, {})", m_width, m_height); }
+		virtual	std::string eventFormat() const override { return std::format("Window resize({}, {})", m_width, m_height); }
 
 	private:
 		int m_width, m_height;
@@ -52,76 +53,60 @@ namespace Ff
 	class WindowFocusEvent : public Event
 	{
 	public:
-		WindowFocusEvent(int focused)
+		WindowFocusEvent()
 			: Event(EventType::WINDOW_FOCUS_EVENT)
-			, m_focused(focused)
 		{
 
 		}
 
-		virtual std::string eventFormat() const override 
-		{ 
-			return (m_focused) ? std::format("Window focused") : std::format("Window not focused");
+		virtual std::string eventFormat() const override { return std::format("Window focused"); }
+	};
+
+	class WindowUnfocusEvent : public Event
+	{
+	public: 
+		WindowUnfocusEvent()
+			: Event(EventType::WINDOW_UNFOCUS_EVENT)
+		{
+
 		}
 
-	private:
-		int m_focused;
+		virtual std::string eventFormat() const override { return std::format("Window unfocused"); }
 	};
 
 	class WindowIconifyEvent : public Event
 	{
 	public:
-		WindowIconifyEvent(int iconified)
+		WindowIconifyEvent()
 			: Event(EventType::WINDOW_ICONIFY_EVENT)
-			, m_iconified(iconified)
 		{
 
 		}
 
-		virtual std::string eventFormat() const override
-		{
-			return (m_iconified) ? std::format("Window iconified") : std::format("Window restored");
-		}
-
-	private:
-		int m_iconified;
+		virtual std::string eventFormat() const override { return std::format("Window iconified"); }
 	};
 
 	class WindowMaximizeEvent : public Event
 	{
 	public:
-		WindowMaximizeEvent(int maximized)
+		WindowMaximizeEvent()
 			: Event(Event::EventType::WINDOW_MAXIMIZE_EVENT)
-			, m_maximized(maximized)
 		{
 
 		}
 
-		virtual std::string eventFormat() const override
-		{
-			return (m_maximized) ? std::format("Window maximized") : std::format("Window restored");
-		}
-
-	private:
-		int m_maximized;
+		virtual std::string eventFormat() const override { return std::format("Window maximized"); }
 	};
 
-	class CursorEnterEvent : public Event
+	class WindowRestoredEvent : public Event
 	{
-	public:
-		CursorEnterEvent(int entered)
-			: Event(EventType::CURSOR_ENTER_EVENT)
-			, m_entered(entered)
+	public: 
+		WindowRestoredEvent()
+			: Event(Event::EventType::WINDOW_RESTORE_EVENT)
 		{
 
 		}
 
-		virtual std::string eventFormat() const override
-		{
-			return (m_entered) ? std::format("Cursor entered") : std::format("Cursor left");
-		}
-
-	private:
-		int m_entered;
+		virtual std::string eventFormat() const override { return std::format("Window restored"); }
 	};
 }

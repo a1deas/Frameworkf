@@ -1,8 +1,7 @@
 #pragma once
 
-#include <string>
-
 #include "Core/log.h"
+#include <string>
 
 namespace Ff
 {
@@ -16,6 +15,8 @@ namespace Ff
 
 			MOUSE_MOVED_EVENT,
 			MOUSE_SCROLLED_EVENT,
+			CURSOR_ENTER_EVENT,
+			CURSOR_LEFT_EVENT,
 
 			KEY_PRESSED_EVENT,
 			KEY_RELEASED_EVENT,
@@ -26,9 +27,11 @@ namespace Ff
 			WINDOW_CLOSED_EVENT,
 			WINDOW_POSITION_EVENT,
 			WINDOW_FOCUS_EVENT,
+			WINDOW_UNFOCUS_EVENT,
 			WINDOW_ICONIFY_EVENT,
 			WINDOW_MAXIMIZE_EVENT,
-			CURSOR_ENTER_EVENT,
+			WINDOW_RESTORE_EVENT,
+			
 		};
 
 	protected:
@@ -79,6 +82,12 @@ namespace Ff
 					return "WINDOW_MAXIMIZE";
 				case EventType::CURSOR_ENTER_EVENT:
 					return "CURSOR_ENTER";
+				case EventType::CURSOR_LEFT_EVENT:
+					return "CURSOR_LEFT";
+				case EventType::WINDOW_UNFOCUS_EVENT:
+					return "WINDOW_UNFOCUS";
+				case EventType::WINDOW_RESTORE_EVENT:
+					return "WINDOW_RESTORE";
 				default:
 					FFERROR("UNKNOWN EVENT");
 					return "UNKNOWN_EVENT";

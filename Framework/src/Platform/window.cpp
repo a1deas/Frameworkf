@@ -1,6 +1,6 @@
+#include "Core/log.h"
 #include "window.h"
 #include "GLFW/glfw3.h"
-#include "Core/log.h"
 #include "EventSystem/mouseEvent.h"
 #include "EventSystem/keyboardEvent.h"
 #include "EventSystem/windowEvent.h"
@@ -46,7 +46,6 @@ namespace Ff
 		glfwSetWindowFocusCallback(m_window, windowFocusCallback);
 		glfwSetWindowIconifyCallback(m_window, windowIconifyCallback);
 		glfwSetWindowMaximizeCallback(m_window, windowMaximizeCallback);
-
 	}
 
 	Window::~Window()
@@ -85,12 +84,12 @@ namespace Ff
 		
 		if (action == GLFW_PRESS)
 		{
-			MouseButtonPressed event(button);
+			MouseButtonPressed event(static_cast<MouseButton>(button));
 			handle.functionCallback(event);
 		}
 		else
 		{
-			MouseButtonReleased event(button);
+			MouseButtonReleased event(static_cast<MouseButton>(button));
 			handle.functionCallback(event);
 		}
 	}
@@ -155,29 +154,54 @@ namespace Ff
 	void Window::windowFocusCallback(GLFWwindow* window, int focused)
 	{
 		auto& handle = *(Window*)glfwGetWindowUserPointer(window);
-		WindowFocusEvent event(focused);
-		handle.functionCallback(event);
+		if (focused)
+		{
+			handle.functionCallback(WindowFocusEvent());
+		}
+		else
+		{
+			handle.functionCallback(WindowUnfocusEvent());
+		}
 	}
 
 	void Window::windowIconifyCallback(GLFWwindow* window, int iconified)
 	{
 		auto& handle = *(Window*)glfwGetWindowUserPointer(window);
-		WindowIconifyEvent event(iconified);
-		handle.functionCallback(event);
+		if (iconified)
+		{
+			handle.functionCallback(WindowIconifyEvent());
+		}
+		else
+		{
+			handle.functionCallback(WindowRestoredEvent());
+		}
 	}
 
 	void Window::windowMaximizeCallback(GLFWwindow* window, int maximized)
 	{
 		auto& handle = *(Window*)glfwGetWindowUserPointer(window);
-		WindowMaximizeEvent event(maximized);
-		handle.functionCallback(event);
+		if (maximized)
+		{
+			handle.functionCallback(WindowMaximizeEvent());
+		}
+		else
+		{
+			handle.functionCallback(WindowRestoredEvent());
+		}
+		
 	}
 
 	void Window::cursorCallback(GLFWwindow* window, int entered)
 	{
 		auto& handle = *(Window*)glfwGetWindowUserPointer(window);
-		CursorEnterEvent event(entered);
-		handle.functionCallback(event);
+		if (entered)
+		{
+			handle.functionCallback(CursorEnterEvent());
+		}
+		else
+		{
+			handle.functionCallback(CursorLeftEvent());
+		}
 	}
 
 }

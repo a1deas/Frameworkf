@@ -19,6 +19,7 @@ namespace Ff
 		}
 
 		virtual std::string eventFormat() const override { return std::format("key: {}", getKeyString(m_key)); }
+
 	private:
 		Key m_key;
 	};
@@ -33,7 +34,8 @@ namespace Ff
 
 		}
 
-		std::string eventFormat() const override { return std::format("key: {}", getKeyString(m_key)); }
+		virtual std::string eventFormat() const override { return std::format("key: {}", getKeyString(m_key)); }
+
 	private:
 		Key m_key;
 	};
@@ -49,7 +51,8 @@ namespace Ff
 
 		}
 
-		std::string eventFormat() const override { return std::format("key: {}", getKeyString(m_key)); }
+		virtual std::string eventFormat() const override { return std::format("key: {}", getKeyString(m_key)); }
+
 	private:
 		Key m_key;
 	};
@@ -64,7 +67,8 @@ namespace Ff
 
 		}
 
-		std::string eventFormat() const override { return std::format("text input: {}", static_cast<char>(m_codepoint)); }
+		virtual std::string eventFormat() const override { return std::format("text input: {}", static_cast<char>(m_codepoint)); }
+
 	private:
 		unsigned int m_codepoint;
 	};

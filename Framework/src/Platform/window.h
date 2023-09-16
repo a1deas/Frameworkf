@@ -1,10 +1,10 @@
 #pragma once
 
-#include "GLFW/glfw3.h"
-#include "EventSystem/event.h"
-
 #include <string>
 #include <functional>
+
+#include "EventSystem/event.h"
+#include "GLFW/glfw3.h"
 
 namespace Ff
 {
@@ -35,13 +35,13 @@ namespace Ff
 		static void windowMaximizeCallback(GLFWwindow* window, int maximized);
 
 
-		void setFunctionCallback(const std::function<void(Event&)>& function) { functionCallback = function; }
+		void setFunctionCallback(const std::function<void(const Event&)>& function) { functionCallback = function; }
 
 	private:
 		GLFWwindow* m_window;
 		int m_width;
 		int m_height;
 		std::string m_windowName;
-		std::function<void(Event&)> functionCallback;
+		std::function<void(const Event&)> functionCallback;
 	};
 }
