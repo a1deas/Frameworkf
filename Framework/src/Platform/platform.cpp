@@ -1,6 +1,6 @@
+#include "Core/log.h"
 #include "platform.h"
 #include "GLFW/glfw3.h"
-#include "Core/log.h"
 
 namespace Ff
 {
