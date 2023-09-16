@@ -2,16 +2,16 @@
 
 namespace Ff
 {
-	class Platform
-	{
-		static Platform* Singleton;
+    class Platform
+    {
+        static Platform* Singleton;
 
-	public:
-		Platform();
-		~Platform();
+    public:
+        Platform();
+        ~Platform();
 
-		void pollEvents() const;
+        void pollEvents() const;
 
-		static Platform* get() { return Singleton;	}
-	};
-}
+        static Platform* get() { return Singleton; }
+    };
+} // namespace Ff

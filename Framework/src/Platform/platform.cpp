@@ -4,31 +4,31 @@
 
 namespace Ff
 {
-	Platform* Platform::Singleton;
+    Platform* Platform::Singleton;
 
-	Platform::Platform()
-	{
-		if (glfwInit())
-		{
-			FFINFO("GLFW initialised");
-		}
-		else
-		{
-			FFERROR("Failed glfw init");
-			abort();
-		}
-		
-		Singleton = this;
-	}
+    Platform::Platform()
+    {
+        if (glfwInit())
+        {
+            FFINFO("GLFW initialised");
+        }
+        else
+        {
+            FFERROR("Failed glfw init");
+            abort();
+        }
 
-	Platform::~Platform()
-	{
-		glfwTerminate();
-	}
+        Singleton = this;
+    }
 
-	void Platform::pollEvents() const
-	{
-		glfwPollEvents();
-	}
+    Platform::~Platform()
+    {
+        glfwTerminate();
+    }
 
-}
+    void Platform::pollEvents() const
+    {
+        glfwPollEvents();
+    }
+
+} // namespace Ff
