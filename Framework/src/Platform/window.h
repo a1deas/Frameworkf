@@ -18,6 +18,9 @@ namespace Ff
 
         void swapBuffers();
 
+        void setFunctionCallback(const std::function<void(const Event&)>& function) { functionCallback = function; }
+        
+    private:
         static void mouseMovedCallback(GLFWwindow* window, double x, double y);
         static void cursorCallback(GLFWwindow* window, int entered);
 
@@ -34,7 +37,6 @@ namespace Ff
         static void windowIconifyCallback(GLFWwindow* window, int iconified);
         static void windowMaximizeCallback(GLFWwindow* window, int maximized);
 
-        void setFunctionCallback(const std::function<void(const Event&)>& function) { functionCallback = function; }
 
     private:
         GLFWwindow*                       m_window;
