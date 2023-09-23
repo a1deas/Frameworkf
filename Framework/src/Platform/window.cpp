@@ -4,6 +4,7 @@
 #include "EventSystem/mouseEvent.h"
 #include "EventSystem/keyboardEvent.h"
 #include "EventSystem/windowEvent.h"
+#include "input.h"
 
 namespace Ff
 {
@@ -17,7 +18,7 @@ namespace Ff
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
         setFunctionCallback([](const Event& event) {
-            FFINFO("{}: Triggered: {}", event.getEventStr(), event.eventFormat());
+            //FFINFO("{}: Triggered: {}", event.getEventStr(), event.eventFormat());
         });
 
         m_window = glfwCreateWindow(m_width, m_height, m_windowName.c_str(), nullptr, nullptr);
@@ -65,36 +66,50 @@ namespace Ff
 
     void Window::mouseMovedCallback(GLFWwindow* window, double x, double y)
     {
-        auto&           handle = *(Window*)glfwGetWindowUserPointer(window);
+        auto& handle = *(Window*)glfwGetWindowUserPointer(window);
+        Input::setCursorPosition(glm::vec2((float)x, (float)y));
         MouseMovedEvent event(x, y);
         handle.functionCallback(event);
     }
 
     void Window::mouseScrolledCallback(GLFWwindow* window, double x, double y)
     {
-        auto&              handle = *(Window*)glfwGetWindowUserPointer(window);
+        auto& handle = *(Window*)glfwGetWindowUserPointer(window);
+
         MouseScrolledEvent event(y);
         handle.functionCallback(event);
     }
 
     void Window::mouseButtonCallback(GLFWwindow* window, int button, int action, int mode)
     {
+        if (button == -1)
+        {
+            return;
+        }
+
         auto& handle = *(Window*)glfwGetWindowUserPointer(window);
 
         if (action == GLFW_PRESS)
         {
             MouseButtonPressed event(static_cast<MouseButton>(button));
+            Input::setButtonState(static_cast<MouseButton>(button), true);
             handle.functionCallback(event);
         }
         else
         {
             MouseButtonReleased event(static_cast<MouseButton>(button));
+            Input::setButtonState(static_cast<MouseButton>(button), false);
             handle.functionCallback(event);
         }
     }
 
     void Window::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
     {
+        if (key == GLFW_KEY_UNKNOWN)
+        {
+            return;
+        }
+        
         auto& handle = *(Window*)glfwGetWindowUserPointer(window);
 
         switch (action)
@@ -102,12 +117,14 @@ namespace Ff
             case GLFW_PRESS:
             {
                 KeyPressedEvent event(static_cast<Key>(key));
+                Input::setKeyState(static_cast<Key>(key), true);
                 handle.functionCallback(event);
                 break;
             }
             case GLFW_RELEASE:
             {
                 KeyReleasedEvent event(static_cast<Key>(key));
+                Input::setKeyState(static_cast<Key>(key), false);
                 handle.functionCallback(event);
                 break;
             }

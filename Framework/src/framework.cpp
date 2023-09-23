@@ -6,6 +6,7 @@
 #include "Platform/window.h"
 
 void init();
+void update();
 
 int main()
 {
@@ -18,6 +19,7 @@ int main()
     while (!window.shouldClose())
     {
         platform.pollEvents();
+        update();
         window.swapBuffers();
     }
 }

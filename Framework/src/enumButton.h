@@ -11,6 +11,7 @@ namespace Ff
         MIDDLE  = 2,
         BACK    = 3,
         FORWARD = 4,
+        LAST,
     };
 
     constexpr std::string_view getButtonString(MouseButton m_button)
@@ -27,6 +28,8 @@ namespace Ff
                 return "Back";
             case Ff::MouseButton::FORWARD:
                 return "Forward";
+            case Ff::MouseButton::LAST:
+                return "Last";
             default:
                 return "Unknown";
         }
