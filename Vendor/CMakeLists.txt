@@ -11,3 +11,6 @@ target_include_directories(spdlog INTERFACE spdlog/include)
 #Подключаем glm
 add_library(glm INTERFACE)
 target_include_directories(glm INTERFACE glm)
+
+#Подключаем glad
+add_subdirectory(glad)

@@ -22,3 +22,7 @@ namespace Ff
 #define FFWARN(...) Ff::Log::getLogger()->warn(__VA_ARGS__)
 #define FFERROR(...) Ff::Log::getLogger()->error(__VA_ARGS__)
 #define FFFATAL(...) Ff::Log::getLogger()->critical(__VA_ARGS__)
+
+#define FFABORT(...)      \
+    FFERROR(__VA_ARGS__); \
+    abort()

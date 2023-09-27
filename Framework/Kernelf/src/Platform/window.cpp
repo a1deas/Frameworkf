@@ -13,7 +13,7 @@ namespace Ff
         , m_height(height)
         , m_windowName(windowName)
     {
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
@@ -24,8 +24,7 @@ namespace Ff
         m_window = glfwCreateWindow(m_width, m_height, m_windowName.c_str(), nullptr, nullptr);
         if (m_window == nullptr)
         {
-            FFERROR("Failed to create GLFW window");
-            abort();
+            FFABORT("Failed to create GLFW window");
         }
         FFINFO("Created window");
         glfwMakeContextCurrent(m_window);

@@ -20,6 +20,8 @@ namespace Ff
 
         void setFunctionCallback(const std::function<void(const Event&)>& function) { functionCallback = function; }
         
+        GLFWwindow* getWindow() const { return m_window; }
+
     private:
         static void mouseMovedCallback(GLFWwindow* window, double x, double y);
         static void cursorCallback(GLFWwindow* window, int entered);
@@ -36,7 +38,6 @@ namespace Ff
         static void windowFocusCallback(GLFWwindow* window, int focused);
         static void windowIconifyCallback(GLFWwindow* window, int iconified);
         static void windowMaximizeCallback(GLFWwindow* window, int maximized);
-
 
     private:
         GLFWwindow*                       m_window;
