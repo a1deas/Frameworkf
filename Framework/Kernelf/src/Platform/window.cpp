@@ -45,7 +45,7 @@ namespace Ff
         glfwSetKeyCallback(m_window, keyCallback);
         glfwSetCharCallback(m_window, characterCallback);
 
-        glfwSetWindowSizeCallback(m_window, windowResizeCallback);
+        glfwSetFramebufferSizeCallback(m_window, windowResizeCallback);
         glfwSetWindowCloseCallback(m_window, windowCloseCallback);
         glfwSetWindowPosCallback(m_window, windowPositionCallback);
         glfwSetWindowFocusCallback(m_window, windowFocusCallback);
@@ -144,30 +144,30 @@ namespace Ff
 
     void Window::characterCallback(GLFWwindow* window, unsigned int codepoint)
     {
-        auto&          handle = *(Window*)glfwGetWindowUserPointer(window);
+        auto& handle = *(Window*)glfwGetWindowUserPointer(window);
         TextInputEvent event(codepoint);
         handle.functionCallback(event);
     }
 
     void Window::windowResizeCallback(GLFWwindow* window, int new_width, int new_height)
     {
-        auto&              handle = *(Window*)glfwGetWindowUserPointer(window);
+        auto& handle = *(Window*)glfwGetWindowUserPointer(window);
         WindowResizedEvent event(new_width, new_height);
-        handle.m_width  = new_width;
+        handle.m_width = new_width;
         handle.m_height = new_height;
         handle.functionCallback(event);
     }
 
     void Window::windowCloseCallback(GLFWwindow* window)
     {
-        auto&            handle = *(Window*)glfwGetWindowUserPointer(window);
+        auto& handle = *(Window*)glfwGetWindowUserPointer(window);
         WindowCloseEvent event;
         handle.functionCallback(event);
     }
 
     void Window::windowPositionCallback(GLFWwindow* window, int xpos, int ypos)
     {
-        auto&               handle = *(Window*)glfwGetWindowUserPointer(window);
+        auto& handle = *(Window*)glfwGetWindowUserPointer(window);
         WindowPositionEvent event(xpos, ypos);
         handle.functionCallback(event);
     }

@@ -22,6 +22,9 @@ namespace Ff
         
         GLFWwindow* getWindow() const { return m_window; }
 
+        int getWidth() const { return m_width; }
+        int getHeight() const { return m_height; }
+
     private:
         static void mouseMovedCallback(GLFWwindow* window, double x, double y);
         static void cursorCallback(GLFWwindow* window, int entered);

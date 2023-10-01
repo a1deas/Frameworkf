@@ -9,5 +9,11 @@ namespace Ff
         GraphicsContextOGL(Window* window);
 
         virtual void useProgram(std::shared_ptr<ShaderProgram> program) override;
+
+        virtual void bindVertexBuffer(std::shared_ptr<VertexBuffer> buffer) override;
+
+        virtual void draw(uint32_t vertexCount) override;
+
+        virtual void setViewport(Viewport2D viewport) override;
     };
 } // namespace Ff
