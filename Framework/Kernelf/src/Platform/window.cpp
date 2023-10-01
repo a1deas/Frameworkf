@@ -17,16 +17,22 @@ namespace Ff
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+#ifndef NDEBUG
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+#endif
+
         setFunctionCallback([](const Event& event) {
             //FFINFO("{}: Triggered: {}", event.getEventStr(), event.eventFormat());
         });
 
         m_window = glfwCreateWindow(m_width, m_height, m_windowName.c_str(), nullptr, nullptr);
+
         if (m_window == nullptr)
         {
             FFABORT("Failed to create GLFW window");
         }
         FFINFO("Created window");
+
         glfwMakeContextCurrent(m_window);
         glfwSetWindowUserPointer(m_window, this);
 
@@ -108,7 +114,7 @@ namespace Ff
         {
             return;
         }
-        
+
         auto& handle = *(Window*)glfwGetWindowUserPointer(window);
 
         switch (action)
