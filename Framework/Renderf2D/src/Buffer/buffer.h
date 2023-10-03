@@ -69,6 +69,8 @@ namespace Ff
         }
 
         inline size_t getIndexCount() const { return spec_.size / sizeof(uint32_t); }
+        static std::shared_ptr<IndexBuffer> create(const IndexBufferSpec& spec);
+
 
     protected:
         IndexBufferSpec spec_;

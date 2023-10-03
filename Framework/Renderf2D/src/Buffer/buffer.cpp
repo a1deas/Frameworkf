@@ -1,6 +1,7 @@
 #include "buffer.h"
 #include "graphicsContext.h"
 #include "OpenGL/vertexBufferOGL.h"
+#include "OpenGL/indexBufferOGL.h"
 
 namespace Ff
 {
@@ -16,4 +17,17 @@ namespace Ff
         }
         return nullptr;
     }
+
+    std::shared_ptr<Ff::IndexBuffer> IndexBuffer::create(const IndexBufferSpec& spec)
+    {
+        switch (gRenderAPI)
+        {
+            case RenderAPI::OpenGL:
+                return std::make_shared<IndexBufferOGL>(spec);
+            case RenderAPI::None:
+                FFABORT("UNKNOWN RENDERAPI");            
+        }
+        return nullptr;
+    }
+
 } // namespace Ff

@@ -26,3 +26,13 @@ namespace Ff
 #define FFABORT(...)      \
     FFERROR(__VA_ARGS__); \
     abort()
+
+#define FFASSERT(condition)      \
+    do                           \
+    {                            \
+        if (!(condition))        \
+        {                        \
+            FFABORT(#condition); \
+        }                        \
+    }                            \
+    while (false)

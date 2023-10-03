@@ -1,6 +1,6 @@
 #include "Core/log.h"
-#include "shaderProgramOGL.h"
 #include "glad/glad.h"
+#include "shaderProgramOGL.h"
 #include "FileSystem/file.h"
 
 namespace Ff
@@ -15,6 +15,11 @@ namespace Ff
     {
         if (m_id != 0)
             glDeleteProgram(m_id);
+    }
+
+    int ShaderProgramOGL::getUniformLocation(const char* name) const
+    {
+        return glGetUniformLocation(m_id, name);
     }
 
     uint32_t ShaderProgramOGL::createShaderProgram(const ShaderProgramSpec& spec)
@@ -50,9 +55,9 @@ namespace Ff
 
     uint32_t ShaderProgramOGL::compileShader(uint32_t type, const std::string& path)
     {
-        unsigned int id     = glCreateShader(type);
-        std::string  source = readFileToString(path);
-        const char*  src    = source.c_str();
+        unsigned int id = glCreateShader(type);
+        std::string source = readFileToString(path);
+        const char* src = source.c_str();
         glShaderSource(id, 1, &src, nullptr);
         glCompileShader(id);
 

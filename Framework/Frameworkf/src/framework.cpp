@@ -31,11 +31,20 @@ int main()
     ShaderProgramSpec spec;
     spec.vertexShaderPath = "Framework/Shaders/testVS.glsl";
     spec.fragmentShaderPath = "Framework/Shaders/testFS.glsl";
+    std::shared_ptr<ShaderProgram> shaderProgram = ShaderProgram::create(spec);
 
-    Vertex vertices[3]{
-        { { 0.0f, 0.5f, 0.0f }, { 1.0f, 0.0f, 0.0f }},
-        { { -0.5f, -0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f }},
-        { { 0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, 1.0f }},
+    Vertex vertices[4]{
+        { { -0.5f, -0.5f, 0.0f }, { 1.0f, 0.0f, 0.0f } },
+        { { 0.5f, -0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f } },
+        { { 0.5f, 0.5f, 0.0f }, { 0.0f, 0.0f, 1.0f } },
+        { { -0.5f, 0.5f, 0.0f }, { 0.5f, 0.0f, 0.5f } },
+
+    };
+
+    uint32_t indices[]
+    {
+        0, 1, 2, 
+        2, 3, 0,
     };
 
     VertexBufferSpec vSpec;
@@ -43,11 +52,14 @@ int main()
     vSpec.stride = sizeof(Vertex);
     vSpec.layout.push_back(VertexLayoutElement{ 0, ShaderDataType::float3, offsetof(Vertex, position) });
     vSpec.layout.push_back(VertexLayoutElement{ 1, ShaderDataType::float3, offsetof(Vertex, color) });
-
     std::shared_ptr<VertexBuffer> vertexBuffer = VertexBuffer::create(vSpec);
-    std::shared_ptr<ShaderProgram> shaderProgram = ShaderProgram::create(spec);
+
+    IndexBufferSpec iSpec;
+    iSpec.size = sizeof(indices);
+    std::shared_ptr<IndexBuffer> indexBuffer = IndexBuffer::create(iSpec);
 
     vertexBuffer->write(vertices, sizeof(vertices));
+    indexBuffer->write(indices, sizeof(indices));
 
     init();
 
@@ -62,8 +74,11 @@ int main()
 
         context->setViewport(viewport);
         context->useProgram(shaderProgram);
+        context->setConstant("u_Offset", std::sin(glfwGetTime()) * 0.1f);
+        
         context->bindVertexBuffer(vertexBuffer);
-        context->draw(3);
+        context->bindIndexBuffer(indexBuffer);
+        context->draw(6);
 
         window.swapBuffers();
     }

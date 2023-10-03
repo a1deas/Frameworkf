@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "Core/types.h"
+
 namespace Ff
 {
     struct ShaderProgramSpec

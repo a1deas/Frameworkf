@@ -41,9 +41,13 @@ namespace Ff
         
         virtual void bindVertexBuffer(std::shared_ptr<VertexBuffer> buffer) = 0;
 
+        virtual void bindIndexBuffer(std::shared_ptr<IndexBuffer> buffer) = 0;
+
         virtual void draw(uint32_t vertexCount) = 0;
 
         virtual void setViewport(Viewport2D viewport) = 0;
+
+        virtual void setConstant(const char* name, float value) = 0;
 
     protected:
         Window* m_window;

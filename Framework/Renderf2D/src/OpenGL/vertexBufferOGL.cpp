@@ -1,7 +1,7 @@
-#include "vertexBufferOGL.h"
-#include "glad/glad.h"
-#include "openGLUtils.h"
 #include "Core/log.h"
+#include "glad/glad.h"
+#include "vertexBufferOGL.h"
+#include "openGLUtils.h"
 
 namespace Ff
 {
@@ -36,6 +36,8 @@ namespace Ff
     VertexBufferOGL::VertexBufferOGL(const VertexBufferSpec& spec)
         : VertexBuffer(spec)
     {
+        FFASSERT(spec.size > 0);
+
         glGenBuffers(1, &buffer_);
         glGenVertexArrays(1, &vertexArray_);
 
