@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include <glm/ext.hpp>
+#include <glm/glm.hpp>
 
 #include "Platform/window.h"
 #include "Shader/shaderProgram.h"

@@ -17,9 +17,19 @@ namespace Ff
             glDeleteProgram(m_id);
     }
 
+    //Ultimate super mega grande common optimization for getUniformLocation();
     int ShaderProgramOGL::getUniformLocation(const char* name) const
     {
-        return glGetUniformLocation(m_id, name);
+        if (m_uniformLocations.contains(name))
+            return m_uniformLocations[name];
+        int location = glGetUniformLocation(m_id, name);
+        if (location == -1)
+        {
+            FFWARN("Failed to find uniform location for: {}", name);
+            return -1;
+        }
+        m_uniformLocations[name] = location;
+        return location;
     }
 
     uint32_t ShaderProgramOGL::createShaderProgram(const ShaderProgramSpec& spec)

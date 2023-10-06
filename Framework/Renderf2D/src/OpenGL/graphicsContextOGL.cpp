@@ -3,6 +3,7 @@
 #include "shaderProgramOGL.h"
 #include "vertexBufferOGL.h"
 #include "indexBufferOGL.h"
+#include "glm/gtc/type_ptr.hpp"
 
 namespace Ff
 {
