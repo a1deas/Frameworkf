@@ -49,7 +49,43 @@ namespace Ff
     void GraphicsContextOGL::setConstant(const char* name, float value)
     {
         FFASSERT(boundProgram_);
-        glUniform1f(boundProgram_->getUniformLocation(name), value);
+        glProgramUniform1f(boundProgram_->getId(), boundProgram_->getUniformLocation(name), value);
+    }
+
+    void GraphicsContextOGL::setConstant(const char* name, int32_t value)
+    {
+        FFASSERT(boundProgram_);
+        glProgramUniform1i(boundProgram_->getId(), boundProgram_->getUniformLocation(name), value);
+    }
+
+    void GraphicsContextOGL::setConstant(const char* name, uint32_t value)
+    {
+        FFASSERT(boundProgram_);
+        glProgramUniform1i(boundProgram_->getId(), boundProgram_->getUniformLocation(name), value);
+    }
+
+    void GraphicsContextOGL::setConstant(const char* name, glm::vec2 value)
+    {
+        FFASSERT(boundProgram_);
+        glProgramUniform2f(boundProgram_->getId(), boundProgram_->getUniformLocation(name), value.x, value.y);
+    }
+
+    void GraphicsContextOGL::setConstant(const char* name, glm::vec3 value)
+    {
+        FFASSERT(boundProgram_);
+        glProgramUniform3f(boundProgram_->getId(), boundProgram_->getUniformLocation(name), value.x, value.y, value.z);
+    }
+
+    void GraphicsContextOGL::setConstant(const char* name, glm::vec4 value)
+    {
+        FFASSERT(boundProgram_);
+        glProgramUniform4f(boundProgram_->getId(), boundProgram_->getUniformLocation(name), value.x, value.y, value.z, value.w);
+    }
+
+    void GraphicsContextOGL::setConstant(const char* name, glm::mat4 value)
+    {
+        FFASSERT(boundProgram_);
+        glProgramUniformMatrix4fv(boundProgram_->getId(), boundProgram_->getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
     }
 
 } // namespace Ff

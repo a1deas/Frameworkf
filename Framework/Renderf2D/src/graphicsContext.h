@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <glm/ext.hpp>
 
 #include "Platform/window.h"
 #include "Shader/shaderProgram.h"
@@ -48,6 +49,12 @@ namespace Ff
         virtual void setViewport(Viewport2D viewport) = 0;
 
         virtual void setConstant(const char* name, float value) = 0;
+        virtual void setConstant(const char* name, int32_t value) = 0;
+        virtual void setConstant(const char* name, uint32_t value) = 0;
+        virtual void setConstant(const char* name, glm::vec2 value) = 0;
+        virtual void setConstant(const char* name, glm::vec3 value) = 0;
+        virtual void setConstant(const char* name, glm::vec4 value) = 0;
+        virtual void setConstant(const char* name, glm::mat4 value) = 0;
 
     protected:
         Window* m_window;

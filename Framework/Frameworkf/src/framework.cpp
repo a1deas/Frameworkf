@@ -41,10 +41,13 @@ int main()
 
     };
 
-    uint32_t indices[]
-    {
-        0, 1, 2, 
-        2, 3, 0,
+    uint32_t indices[]{
+        0,
+        1,
+        2,
+        2,
+        3,
+        0,
     };
 
     VertexBufferSpec vSpec;
@@ -63,6 +66,10 @@ int main()
 
     init();
 
+    glfwSwapInterval(1);
+    float x{};
+    float increment = 0.05f;
+
     while (!window.shouldClose())
     {
         platform.pollEvents();
@@ -74,11 +81,19 @@ int main()
 
         context->setViewport(viewport);
         context->useProgram(shaderProgram);
-        context->setConstant("u_Offset", std::sin(glfwGetTime()) * 0.1f);
-        
+
         context->bindVertexBuffer(vertexBuffer);
         context->bindIndexBuffer(indexBuffer);
+
+        context->setConstant("u_Color", glm::vec4(x, 0.5f, 0.5f, 1.0f));
+        
         context->draw(6);
+
+        if (x > 1.0f)
+            increment = -0.05f;
+        else if (x < 0.0f)
+            increment = 0.05f;
+        x += increment;
 
         window.swapBuffers();
     }
