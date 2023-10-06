@@ -17,16 +17,22 @@ namespace Ff
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+#ifndef NDEBUG
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+#endif
+
         setFunctionCallback([](const Event& event) {
             //FFINFO("{}: Triggered: {}", event.getEventStr(), event.eventFormat());
         });
 
         m_window = glfwCreateWindow(m_width, m_height, m_windowName.c_str(), nullptr, nullptr);
+
         if (m_window == nullptr)
         {
             FFABORT("Failed to create GLFW window");
         }
         FFINFO("Created window");
+
         glfwMakeContextCurrent(m_window);
         glfwSetWindowUserPointer(m_window, this);
 
@@ -39,7 +45,7 @@ namespace Ff
         glfwSetKeyCallback(m_window, keyCallback);
         glfwSetCharCallback(m_window, characterCallback);
 
-        glfwSetWindowSizeCallback(m_window, windowResizeCallback);
+        glfwSetFramebufferSizeCallback(m_window, windowResizeCallback);
         glfwSetWindowCloseCallback(m_window, windowCloseCallback);
         glfwSetWindowPosCallback(m_window, windowPositionCallback);
         glfwSetWindowFocusCallback(m_window, windowFocusCallback);
@@ -108,7 +114,7 @@ namespace Ff
         {
             return;
         }
-        
+
         auto& handle = *(Window*)glfwGetWindowUserPointer(window);
 
         switch (action)
@@ -138,30 +144,30 @@ namespace Ff
 
     void Window::characterCallback(GLFWwindow* window, unsigned int codepoint)
     {
-        auto&          handle = *(Window*)glfwGetWindowUserPointer(window);
+        auto& handle = *(Window*)glfwGetWindowUserPointer(window);
         TextInputEvent event(codepoint);
         handle.functionCallback(event);
     }
 
     void Window::windowResizeCallback(GLFWwindow* window, int new_width, int new_height)
     {
-        auto&              handle = *(Window*)glfwGetWindowUserPointer(window);
+        auto& handle = *(Window*)glfwGetWindowUserPointer(window);
         WindowResizedEvent event(new_width, new_height);
-        handle.m_width  = new_width;
+        handle.m_width = new_width;
         handle.m_height = new_height;
         handle.functionCallback(event);
     }
 
     void Window::windowCloseCallback(GLFWwindow* window)
     {
-        auto&            handle = *(Window*)glfwGetWindowUserPointer(window);
+        auto& handle = *(Window*)glfwGetWindowUserPointer(window);
         WindowCloseEvent event;
         handle.functionCallback(event);
     }
 
     void Window::windowPositionCallback(GLFWwindow* window, int xpos, int ypos)
     {
-        auto&               handle = *(Window*)glfwGetWindowUserPointer(window);
+        auto& handle = *(Window*)glfwGetWindowUserPointer(window);
         WindowPositionEvent event(xpos, ypos);
         handle.functionCallback(event);
     }
