@@ -9,6 +9,8 @@
 #include "Shader/shaderProgram.h"
 #include "glm/glm.hpp"
 #include "Buffer/buffer.h"
+#include "renderer.h"
+#include "Texture/texture.h"
 
 using namespace Ff;
 
@@ -19,6 +21,14 @@ struct Vertex
 {
     glm::vec3 position{};
     glm::vec3 color{};
+    glm::vec2 uv{};
+};
+
+struct Triangle
+{
+    uint32_t p0{};
+    uint32_t p1{};
+    uint32_t p2{};
 };
 
 int main()
@@ -27,6 +37,7 @@ int main()
     Platform platform;
     Window window(800, 600, "Frameworkf");
     std::unique_ptr<GraphicsContext> context = GraphicsContext::create(&window);
+    Renderer renderer;
 
     ShaderProgramSpec spec;
     spec.vertexShaderPath = "Framework/Shaders/testVS.glsl";
@@ -34,20 +45,16 @@ int main()
     std::shared_ptr<ShaderProgram> shaderProgram = ShaderProgram::create(spec);
 
     Vertex vertices[4]{
-        { { -0.5f, -0.5f, 0.0f }, { 1.0f, 0.0f, 0.0f } },
-        { { 0.5f, -0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f } },
-        { { 0.5f, 0.5f, 0.0f }, { 0.0f, 0.0f, 1.0f } },
-        { { -0.5f, 0.5f, 0.0f }, { 0.5f, 0.0f, 0.5f } },
+        { { -0.5f, -0.5f, 0.0f }, { 1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f } },
+        { { 0.5f, -0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f }, { 1.0f, 0.0f } },
+        { { 0.5f, 0.5f, 0.0f }, { 0.0f, 0.0f, 1.0f }, { 1.0f, 1.0f } },
+        { { -0.5f, 0.5f, 0.0f }, { 0.5f, 0.0f, 0.5f }, { 0.0f, 1.0f } },
 
     };
 
-    uint32_t indices[]{
-        0,
-        1,
-        2,
-        2,
-        3,
-        0,
+    Triangle indices[] = {
+        { 0, 1, 2 },
+        { 2, 3, 0 },
     };
 
     VertexBufferSpec vSpec;
@@ -55,6 +62,7 @@ int main()
     vSpec.stride = sizeof(Vertex);
     vSpec.layout.push_back(VertexLayoutElement{ 0, ShaderDataType::float3, offsetof(Vertex, position) });
     vSpec.layout.push_back(VertexLayoutElement{ 1, ShaderDataType::float3, offsetof(Vertex, color) });
+    vSpec.layout.push_back(VertexLayoutElement{ 2, ShaderDataType::float2, offsetof(Vertex, uv) });
     std::shared_ptr<VertexBuffer> vertexBuffer = VertexBuffer::create(vSpec);
 
     IndexBufferSpec iSpec;
@@ -63,6 +71,10 @@ int main()
 
     vertexBuffer->write(vertices, sizeof(vertices));
     indexBuffer->write(indices, sizeof(indices));
+
+    TextureSpec tSpec;
+    tSpec.path = "resources/textures/photo.png";
+    std::shared_ptr<Texture> texture = Texture::create(tSpec);
 
     init();
 
@@ -79,15 +91,18 @@ int main()
 
         update();
 
+        context->clear();
+
+        renderer.beginScene(shaderProgram);
+
+        context->bindTexture(texture);
+        context->setConstant("u_Texture", int32_t(0));
         context->setViewport(viewport);
-        context->useProgram(shaderProgram);
-
-        context->bindVertexBuffer(vertexBuffer);
-        context->bindIndexBuffer(indexBuffer);
-
         context->setConstant("u_Color", glm::vec4(x, 0.5f, 0.5f, 1.0f));
-        
-        context->draw(6);
+
+        renderer.draw(vertexBuffer, indexBuffer);
+
+        renderer.endScene();
 
         if (x > 1.0f)
             increment = -0.05f;

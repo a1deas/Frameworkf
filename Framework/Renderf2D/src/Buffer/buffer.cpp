@@ -25,7 +25,7 @@ namespace Ff
             case RenderAPI::OpenGL:
                 return std::make_shared<IndexBufferOGL>(spec);
             case RenderAPI::None:
-                FFABORT("UNKNOWN RENDERAPI");            
+                FFABORT("UNKNOWN RENDERAPI");
         }
         return nullptr;
     }

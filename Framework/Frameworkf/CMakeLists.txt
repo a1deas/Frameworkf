@@ -20,4 +20,4 @@ set_target_properties(Frameworkf PROPERTIES
 FOLDER Main
 )
 
-target_link_libraries(Frameworkf PUBLIC Kernelf Renderf2D)
+target_link_libraries(Frameworkf PUBLIC Kernelf Renderf2D glad)
