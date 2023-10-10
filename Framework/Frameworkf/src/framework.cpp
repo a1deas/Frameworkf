@@ -10,6 +10,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "Buffer/buffer.h"
+#include "UI/uiContext.h"
 #include "renderer.h"
 #include "Texture/texture.h"
 
@@ -38,6 +39,7 @@ int main()
     Platform platform;
     Window window(800, 600, "Frameworkf");
     std::unique_ptr<GraphicsContext> context = GraphicsContext::create(&window);
+    UIContext::init(window);
     Renderer renderer;
 
     ShaderProgramSpec spec;
@@ -79,12 +81,20 @@ int main()
 
     init();
 
-    glfwSwapInterval(2);
-    float x = 0.5f;
-    float y = 0.7f;
-    float z{};
+    glfwSwapInterval(0);
+    float r = 0.0f;
+    float g = 0.0f;
+    float b = 0.0f;
 
-    float increment = 0.05f;
+    glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f);
+
+    float x = 1.0f;
+    float _x = 0.05f;
+    //
+    bool show_demo_window = true;
+    bool show_another_window = true;
+    glm::vec4 clear_color = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+    //
 
     while (!window.shouldClose())
     {
@@ -101,38 +111,46 @@ int main()
         const float halfDisplayHeight = displayHeight * 0.5f;
 
         glm::mat4 proj = glm::ortho(-halfDisplayWidth, halfDisplayWidth, -halfDisplayHeight, halfDisplayHeight, -1.0f, 1.0f);
-        glm::mat4 view = glm::translate(glm::mat4(1.0f), -glm::vec3(1.0f, 0.0f, 0.0f));
+        glm::mat4 view = glm::translate(glm::mat4(1.0f), -glm::vec3(x, 0.0f, 0.0f));
         glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
         update();
 
         context->clear();
 
+        UIContext::begin();
         renderer.beginScene(shaderProgram);
 
         context->bindTexture(texture);
         context->setConstant("u_Texture", int32_t(0));
         context->setViewport(viewport);
-        context->setConstant("u_Color", glm::vec4(x, y, 0.5f, 1.0f));
+        context->setConstant("u_Color", glm::vec4(color, 1.0f));
 
         context->setConstant("u_MVP", proj * view * model);
 
         renderer.draw(vertexBuffer, indexBuffer);
 
+        //
+        {
+            ImGui::Begin("Frameworkf");
+            ImGui::SliderFloat3("Color##1", &color.r, 0.0f, 1.0f);
+            ImGui::ColorEdit3("Color##2", (float*)&color.r);
+            if (ImGui::Button("<--"))
+                x += _x;
+            ImGui::SameLine();
+            if (ImGui::Button("-->"))
+                x -= _x;
+
+            ImGuiIO& io = ImGui::GetIO();
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+            ImGui::End();
+        }
+        //
+
         renderer.endScene();
-
-        if (x > 1.0f)
-            increment = -0.05f;
-        else if (x < 0.0f)
-            increment = 0.05f;
-        x += increment;
-
-        if (y > 1.0f)
-            increment = -0.05f;
-        else if (y < 0.0f)
-            increment = 0.05f;
-        y += increment;
+        UIContext::end();
 
         window.swapBuffers();
     }
+    UIContext::destroyContext();
 }
