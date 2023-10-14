@@ -20,4 +20,4 @@ set_target_properties(Renderf2D PROPERTIES
 FOLDER Main
 )
 
-target_link_libraries(Renderf2D PUBLIC Kernelf PRIVATE glad)
+target_link_libraries(Renderf2D PUBLIC Kernelf imgui PRIVATE glad )

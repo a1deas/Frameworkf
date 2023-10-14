@@ -17,4 +17,6 @@ namespace Ff
         return nullptr;
     }
 
+    Ff::GraphicsContext* GraphicsContext::instance;
+
 } // namespace Ff

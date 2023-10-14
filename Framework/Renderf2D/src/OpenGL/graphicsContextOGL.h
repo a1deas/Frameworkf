@@ -12,8 +12,10 @@ namespace Ff
         virtual void useProgram(std::shared_ptr<ShaderProgram> program) override;
 
         virtual void bindVertexBuffer(std::shared_ptr<VertexBuffer> buffer) override;
-
         virtual void bindIndexBuffer(std::shared_ptr<IndexBuffer> buffer) override;
+        virtual void bindTexture(std::shared_ptr<Texture> texture, uint32_t slot = 0) override;
+
+        virtual void drawElements(uint32_t indexCount) override;
 
         virtual void draw(uint32_t vertexCount) override;
 
@@ -26,6 +28,8 @@ namespace Ff
         virtual void setConstant(const char* name, glm::vec3 value) override;
         virtual void setConstant(const char* name, glm::vec4 value) override;
         virtual void setConstant(const char* name, glm::mat4 value) override;
+
+        virtual void clear() override;
 
 
     private:

@@ -13,8 +13,12 @@ namespace Ff
         friend class Window;
 
     public:
-        Input()
+        Input() = delete;
+
+        static void resetOffsets()
         {
+            mouseOffset = {0.0f, 0.0f};
+            scrollOffset = 0.0;
         }
 
         static bool isKeyPressed(Key key)
@@ -32,7 +36,13 @@ namespace Ff
             return cursorPosition;
         }
 
+        static glm::vec2 getMouseOffset() { return mouseOffset; }
+        static double getScrollOffset() { return scrollOffset; }
+
     private:
+        
+        static void setScrollOffset(double val) { scrollOffset = val; }
+
         static void setButtonState(MouseButton button, bool state)
         {
             mouseBitset[static_cast<size_t>(button)] = state;
@@ -45,11 +55,15 @@ namespace Ff
 
         static void setCursorPosition(glm::vec2 cursorPos)
         {
+            glm::vec2 oldPos = cursorPosition;
             cursorPosition = cursorPos;
+            mouseOffset = cursorPos - oldPos;
         }
 
         static std::bitset<static_cast<size_t>(MouseButton::LAST)> mouseBitset;
-        static std::bitset<static_cast<size_t>(Key::KEY_LAST)>     keyBitset;
-        static glm::vec2                                           cursorPosition;
+        static std::bitset<static_cast<size_t>(Key::KEY_LAST)> keyBitset;
+        static glm::vec2 cursorPosition;
+        static glm::vec2 mouseOffset;
+        static double scrollOffset;
     };
 } // namespace Ff

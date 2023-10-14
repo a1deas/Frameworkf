@@ -4,9 +4,29 @@
 #include "vertexBufferOGL.h"
 #include "indexBufferOGL.h"
 #include "glm/gtc/type_ptr.hpp"
+#include "textureOGL.h"
 
 namespace Ff
 {
+    static void openGLCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+    {
+        switch (severity)
+        {
+            case GL_DEBUG_SEVERITY_NOTIFICATION:
+                FFTRACE("OpenGL: {}", message);
+                break;
+            case GL_DEBUG_SEVERITY_LOW:
+                FFINFO("OpenGL: {}", message);
+                break;
+            case GL_DEBUG_SEVERITY_MEDIUM:
+                FFWARN("OpenGL: {}", message);
+                break;
+            case GL_DEBUG_SEVERITY_HIGH:
+                FFERROR("OpenGL: {}", message);
+                break;
+        }
+    }
+
     Ff::GraphicsContextOGL::GraphicsContextOGL(Window* window)
         : GraphicsContext(window)
     {
@@ -16,30 +36,44 @@ namespace Ff
         {
             FFABORT("OpenGL initialize failed!");
         }
+
+        glDebugMessageCallback(openGLCallback, nullptr);
     }
 
     void GraphicsContextOGL::useProgram(std::shared_ptr<ShaderProgram> program)
     {
-        std::shared_ptr<ShaderProgramOGL> glProgram = std::static_pointer_cast<ShaderProgramOGL>(program);
+        auto glProgram = std::static_pointer_cast<ShaderProgramOGL>(program);
         glUseProgram(glProgram->getId());
         boundProgram_ = glProgram;
     }
 
     void GraphicsContextOGL::bindVertexBuffer(std::shared_ptr<VertexBuffer> buffer)
     {
-        std::shared_ptr<VertexBufferOGL> vertexBuffer = std::static_pointer_cast<VertexBufferOGL>(buffer);
+        auto vertexBuffer = std::static_pointer_cast<VertexBufferOGL>(buffer);
         glBindVertexArray(vertexBuffer->getVertexArray());
     }
 
     void GraphicsContextOGL::bindIndexBuffer(std::shared_ptr<IndexBuffer> buffer)
     {
-        std::shared_ptr<IndexBufferOGL> indexBuffer = std::static_pointer_cast<IndexBufferOGL>(buffer);
+        auto indexBuffer = std::static_pointer_cast<IndexBufferOGL>(buffer);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer->getBuffer());
+    }
+
+    void GraphicsContextOGL::bindTexture(std::shared_ptr<Texture> texture, uint32_t slot /*= 0*/)
+    {
+        auto textureOGL = std::static_pointer_cast<TextureOGL>(texture);
+        glActiveTexture(GL_TEXTURE0 + slot);
+        glBindTexture(GL_TEXTURE_2D, textureOGL->getId());
+    }
+
+    void GraphicsContextOGL::drawElements(uint32_t indexCount)
+    {
+        glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
     }
 
     void GraphicsContextOGL::draw(uint32_t vertexCount)
     {
-        glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, nullptr);
+        glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(vertexCount));
     }
 
     void GraphicsContextOGL::setViewport(Viewport2D viewport)
@@ -87,6 +121,11 @@ namespace Ff
     {
         FFASSERT(boundProgram_);
         glProgramUniformMatrix4fv(boundProgram_->getId(), boundProgram_->getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
+    }
+
+    void GraphicsContextOGL::clear()
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
     }
 
 } // namespace Ff
