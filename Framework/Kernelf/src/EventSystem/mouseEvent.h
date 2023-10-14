@@ -32,6 +32,7 @@ namespace Ff
 
         virtual std::string eventFormat() const override { return std::format("offset: {}", m_offset); }
 
+        double getOffset() { return m_offset; }
     private:
         double m_offset;
     };

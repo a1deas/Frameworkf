@@ -7,4 +7,9 @@ namespace Ff
     std::bitset<static_cast<size_t>(Key::KEY_LAST)> Input::keyBitset;
 
     glm::vec2 Input::cursorPosition;
+
+    glm::vec2 Input::mouseOffset;
+
+    double Input::scrollOffset;
+
 } // namespace Ff

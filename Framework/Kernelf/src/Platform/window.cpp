@@ -77,10 +77,10 @@ namespace Ff
         handle.functionCallback(event);
     }
 
-    void Window::mouseScrolledCallback(GLFWwindow* window, double x, double y)
+    void Window::mouseScrolledCallback(GLFWwindow* window, double, double y)
     {
         auto& handle = *(Window*)glfwGetWindowUserPointer(window);
-
+        Input::setScrollOffset(y);
         MouseScrolledEvent event(y);
         handle.functionCallback(event);
     }
