@@ -9,12 +9,15 @@ namespace Ff
     {
         switch (type)
         {
+            case ShaderDataType::float1:
+                return 1;
             case ShaderDataType::float2:
                 return 2;
             case ShaderDataType::float3:
                 return 3;
             case ShaderDataType::float4:
                 return 4;
+
         }
         FFABORT("UNKNOWN");
         return 0;
@@ -24,6 +27,7 @@ namespace Ff
     {
         switch (type)
         {
+            case Ff::ShaderDataType::float1:
             case Ff::ShaderDataType::float2:
             case Ff::ShaderDataType::float3:
             case Ff::ShaderDataType::float4:

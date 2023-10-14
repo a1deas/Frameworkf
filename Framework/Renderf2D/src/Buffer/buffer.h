@@ -14,6 +14,7 @@ namespace Ff
 
     enum class ShaderDataType
     {
+        float1,
         float2,
         float3,
         float4,
