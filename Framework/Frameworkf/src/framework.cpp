@@ -131,7 +131,6 @@ int main()
         update();
         context->clear();
 
-        UIContext::begin();
         renderer.beginScene(shaderProgram);
 
         glm::mat4 proj1 = camera.generateProjMatrix(viewport);
@@ -149,6 +148,13 @@ int main()
         context->setViewport(viewport);
 
         renderer.draw(vertexBuffer, indexBuffer);
+        renderer.endScene();
+
+        UIContext::begin();
+        
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+
 
         //
         {
@@ -183,7 +189,6 @@ int main()
             ImGui::End();
         }
 
-        renderer.endScene();
         UIContext::end();
 
         window.swapBuffers();
