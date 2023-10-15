@@ -46,6 +46,7 @@ int main()
     UIContext::init(window);
     Renderer renderer;
     Camera camera;
+    Timer mainTimer;
 
     camera.width = 8.0f;
 
@@ -118,7 +119,6 @@ int main()
     bool show_another_window = true;
     //
 
-    Timer mainTimer;
 
     while (!window.shouldClose())
     {
@@ -136,13 +136,13 @@ int main()
 
         glm::mat4 proj1 = camera.generateProjMatrix(viewport);
         glm::mat4 view1 = camera.generateViewMatrix(0.0f, 0.0f);
-        camera.moveCamera(mainTimer.getDelta());
-        camera.zoomCamera(Input::getScrollOffset(), mainTimer.getDelta());
-        context->setConstant("u_MVP", proj1 * view1);
+        
+        camera.controlCamera(mainTimer.getDelta());
         
         context->bindTexture(textureA, 0);
         context->bindTexture(textureB, 1);
         
+        context->setConstant("u_MVP", proj1 * view1);
         context->setConstant("u_Color", glm::vec4(color, 1.0f));
         context->setConstant("u_Texture[0]", int32_t(0));
         context->setConstant("u_Texture[1]", int32_t(1));
@@ -158,6 +158,8 @@ int main()
 
             ImGui::SliderFloat3("Color2##1", &color.r, 0.0f, 1.0f);
             ImGui::ColorEdit3("Color2##2", (float*)&color.r);
+
+            ImGui::DragFloat("dragSpeed", &camera.speedConst, 0.001f);
 
             ImGui::Text("First");
             if (ImGui::Button("<--##1"))

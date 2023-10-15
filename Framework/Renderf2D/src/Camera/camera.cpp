@@ -29,11 +29,24 @@ namespace Ff
         return view;
     }
 
-    void Camera::onEvent()
+    void Camera::controlCamera(float delta)
     {
+        moveCamera(delta);
+        dragCamera(delta);
+        zoomCamera(Input::getScrollOffset(), delta);
     }
 
-    bool Camera::moveCamera(float delta)
+    void Camera::dragCamera(float delta)
+    {
+        if (Input::isButtonPressed(MouseButton::LEFT))
+        {
+            glm::vec2 offset = Input::getMouseOffset();
+            position.x += offset.x * delta * width * speedConst;
+            position.y -= offset.y * delta * width * speedConst;
+        }
+    }
+
+    void Camera::moveCamera(float delta)
     {
         if (Input::isKeyPressed(Key::KEY_LEFT) || Input::isKeyPressed(Key::KEY_A))
         {
@@ -54,7 +67,6 @@ namespace Ff
         {
             position.y -= speed * delta;
         }
-        return false;
     }
 
 } // namespace Ff
