@@ -16,6 +16,7 @@
 #include "Camera/camera.h"
 #include "Core/timers.h"
 #include "Platform/input.h"
+#include "Framebuffer/framebuffer.h"
 
 using namespace Ff;
 
@@ -91,6 +92,14 @@ int main()
     vertexBuffer->write(vertices, sizeof(vertices));
     indexBuffer->write(indices, sizeof(indices));
 
+    FramebufferSpec fSpec;
+    fSpec.colorAttachments.push_back(ImageFormat::RGBA);
+    fSpec.width = window.getWidth();
+    fSpec.height = window.getHeight();
+
+
+    std::shared_ptr<Framebuffer> framebuffer = Framebuffer::create(fSpec);
+
     TextureSpec tSpecA;
     tSpecA.path = "resources/textures/roland.png";
 
@@ -107,7 +116,10 @@ int main()
     float g = 0.0f;
     float b = 0.0f;
 
-    glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 color = glm::vec3(0.9f, 0.5f, 0.1f);
+    float incrementr = 0.05f;
+    float incrementb = 0.05f;
+
     glm::vec4 clear_color = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
 
     float x1 = 1.0f;
@@ -129,8 +141,9 @@ int main()
         viewport.height = window.getHeight();
 
         update();
-        context->clear();
 
+        context->bindFramebuffer(framebuffer);
+        context->clear();
         renderer.beginScene(shaderProgram);
 
         glm::mat4 proj1 = camera.generateProjMatrix(viewport);
@@ -150,12 +163,25 @@ int main()
         renderer.draw(vertexBuffer, indexBuffer);
         renderer.endScene();
 
+        context->unbindFramebuffer();
+        context->clear();
+
         UIContext::begin();
         
+        ImGui::DockSpaceOverViewport();
+
         if (show_demo_window)
             ImGui::ShowDemoWindow(&show_demo_window);
 
-
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0, 0 });
+        if (ImGui::Begin("Viewport"))
+        {
+            ImGui::Image(reinterpret_cast<ImTextureID>(framebuffer->getColorAttachment()), 
+                ImGui::GetContentRegionAvail(),
+                ImVec2(0, 1), ImVec2(1, 0));
+        } 
+        ImGui::End();
+        ImGui::PopStyleVar();
         //
         {
             ImGui::Begin("Properties", nullptr, ImGuiWindowFlags_NoCollapse);
@@ -167,19 +193,23 @@ int main()
 
             ImGui::DragFloat("dragSpeed", &camera.speedConst, 0.001f);
 
-            ImGui::Text("First");
-            if (ImGui::Button("<--##1"))
-                x1 += _x;
-            ImGui::SameLine();
-            if (ImGui::Button("-->##1"))
-                x1 -= _x;
+            static bool check = false;
+            ImGui::Checkbox("RGB - rand", &check);
+            if (check)
+            {
+                if (color.r > 1.0f)
+                    incrementr = -0.05f;
+                if (color.r < 0.0f)
+                    incrementr = 0.05f;
 
-            ImGui::Text("Second");
-            if (ImGui::Button("<--##2"))
-                x2 += _x;
-            ImGui::SameLine();
-            if (ImGui::Button("-->##2"))
-                x2 -= _x;
+                if (color.b > 1.0f)
+                    incrementb = -0.05f;
+                if (color.b < 0.0f)
+                    incrementb = 0.05f;
+
+                color.r += incrementr;
+                color.b += incrementb;
+            }
 
             ImGuiIO& io = ImGui::GetIO();
             ImGui::Text("Application average %.3f ms", 1000.0f / io.Framerate);

@@ -38,7 +38,7 @@ namespace Ff
 
     void Camera::dragCamera(float delta)
     {
-        if (Input::isButtonPressed(MouseButton::LEFT))
+        if (Input::isButtonPressed(MouseButton::LEFT) && Input::isKeyPressed(Key::KEY_SPACE))
         {
             glm::vec2 offset = Input::getMouseOffset();
             position.x += offset.x * delta * width * speedConst;

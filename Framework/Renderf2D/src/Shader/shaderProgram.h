@@ -15,8 +15,20 @@ namespace Ff
     class ShaderProgram
     {
     public:
-        virtual ~ShaderProgram() = default;
+        ShaderProgram(const ShaderProgramSpec& spec);
+        ~ShaderProgram();
         static std::shared_ptr<ShaderProgram> create(const ShaderProgramSpec& spec);
+
+        uint32_t getId() const { return m_id; }
+        int getUniformLocation(const char* name) const;
+
+    private:
+        static uint32_t createShaderProgram(const ShaderProgramSpec& spec);
+        static uint32_t compileShader(uint32_t type, const std::string& source);
+
+    private:
+        mutable std::unordered_map<std::string, int> m_uniformLocations;
+        uint32_t m_id{};
     };
 
 } // namespace Ff
