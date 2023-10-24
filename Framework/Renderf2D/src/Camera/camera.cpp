@@ -3,6 +3,7 @@
 #include "Platform/input.h"
 #include "graphicsContext.h"
 #include "glm/gtc/matrix_transform.hpp"
+#include "Core/profile.h"
 
 namespace Ff
 {
@@ -31,6 +32,7 @@ namespace Ff
 
     void Camera::controlCamera(float delta)
     {
+        FF_PROFILE_SCOPE();
         moveCamera(delta);
         dragCamera(delta);
         zoomCamera(Input::getScrollOffset(), delta);

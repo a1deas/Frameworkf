@@ -5,6 +5,7 @@
 #include "EventSystem/keyboardEvent.h"
 #include "EventSystem/windowEvent.h"
 #include "input.h"
+#include "Core/profile.h"
 
 namespace Ff
 {
@@ -66,6 +67,7 @@ namespace Ff
 
     void Window::swapBuffers()
     {
+        FF_PROFILE_SCOPE();
         glfwSwapBuffers(m_window);
     }
 

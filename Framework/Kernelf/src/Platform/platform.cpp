@@ -1,6 +1,7 @@
 #include "Core/log.h"
 #include "platform.h"
 #include "GLFW/glfw3.h"
+#include "Core/profile.h"
 
 namespace Ff
 {
@@ -28,7 +29,7 @@ namespace Ff
 
     void Platform::pollEvents() const
     {
+        FF_PROFILE_SCOPE();
         glfwPollEvents();
     }
-
 } // namespace Ff

@@ -1,21 +1,23 @@
 #include "Core/log.h"
+#include "Core/profile.h"
+#include "Core/timers.h"
+
 #include <iostream>
 #include <format>
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 #include "Platform/platform.h"
 #include "Platform/window.h"
+#include "Platform/input.h"
 
+#include "renderer.h"
 #include "graphicsContext.h"
 #include "Shader/shaderProgram.h"
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
 #include "Buffer/buffer.h"
 #include "UI/uiContext.h"
-#include "renderer.h"
 #include "Texture/texture.h"
 #include "Camera/camera.h"
-#include "Core/timers.h"
-#include "Platform/input.h"
 #include "Framebuffer/framebuffer.h"
 
 using namespace Ff;
@@ -111,7 +113,7 @@ int main()
 
     init();
 
-    glfwSwapInterval(1);
+    glfwSwapInterval(0);
     float r = 0.0f;
     float g = 0.0f;
     float b = 0.0f;
@@ -134,6 +136,7 @@ int main()
 
     while (!window.shouldClose())
     {
+        FF_PROFILE_FRAME("Game Loop");
         mainTimer.start();
         platform.pollEvents();
         Viewport2D viewport{};
@@ -176,14 +179,18 @@ int main()
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0, 0 });
         if (ImGui::Begin("Viewport"))
         {
+            FF_PROFILE_SCOPE("Begin Viewport");
             ImGui::Image(reinterpret_cast<ImTextureID>(framebuffer->getColorAttachment()), 
                 ImGui::GetContentRegionAvail(),
                 ImVec2(0, 1), ImVec2(1, 0));
         } 
+
         ImGui::End();
         ImGui::PopStyleVar();
+        
         //
         {
+            FF_PROFILE_SCOPE("Properties scope");
             ImGui::Begin("Properties", nullptr, ImGuiWindowFlags_NoCollapse);
             ImGui::SliderFloat3("Color1##1", &color.r, 0.0f, 1.0f);
             ImGui::ColorEdit3("Color1##2", (float*)&color.r);

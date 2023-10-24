@@ -1,4 +1,5 @@
 #include "uiContext.h"
+#include "Core/profile.h"
 
 namespace Ff
 {
@@ -34,6 +35,7 @@ namespace Ff
 
     void UIContext::begin()
     {
+        FF_PROFILE_SCOPE();
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -41,6 +43,7 @@ namespace Ff
 
     void UIContext::end()
     {
+        FF_PROFILE_SCOPE();
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

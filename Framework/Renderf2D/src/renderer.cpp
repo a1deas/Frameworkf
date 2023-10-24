@@ -1,5 +1,6 @@
 #include "renderer.h"
 #include "graphicsContext.h"
+#include "Core/profile.h"
 
 namespace Ff
 {
@@ -13,6 +14,7 @@ namespace Ff
 
     void Renderer::beginScene(std::shared_ptr<ShaderProgram> shader) const
     {
+        FF_PROFILE_SCOPE();
         GraphicsContext::getInstance().useProgram(shader);
     }
 

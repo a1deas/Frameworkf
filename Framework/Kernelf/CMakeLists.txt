@@ -20,8 +20,12 @@ set_target_properties(Kernelf PROPERTIES
 FOLDER Main
 )
 
-target_link_libraries(Kernelf PUBLIC glfw glm spdlog)
+target_link_libraries(Kernelf PUBLIC glfw glm spdlog OptickCore)
 
-target_compile_definitions(Kernelf PUBLIC GLFW_INCLUDE_NONE)
+target_compile_definitions(Kernelf 
+    PUBLIC 
+        GLFW_INCLUDE_NONE 
+        ENABLE_PROFILING
+    )
 
 target_precompile_headers(Kernelf PUBLIC src/pch.h)
