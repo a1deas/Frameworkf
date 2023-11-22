@@ -22,19 +22,19 @@ namespace Ff
     }
 
     Texture::Texture(const TextureSpec& spec)
-        : m_Spec(spec)
+        : spec(spec)
     {
         FFASSERT(!spec.path.empty());
 
         int width, height, bpp;
 
         stbi_set_flip_vertically_on_load(1);
-        m_LocalBuffer = stbi_load(spec.path.c_str(), &width, &height, &bpp, 4);
+        localBuffer = stbi_load(spec.path.c_str(), &width, &height, &bpp, 4);
 
-        FFASSERT(m_LocalBuffer);
+        FFASSERT(localBuffer);
 
-        m_Width = width;
-        m_Height = height;
+        width = width;
+        height = height;
 
         glGenTextures(1, &m_Id);
         glBindTexture(GL_TEXTURE_2D, m_Id);
@@ -44,17 +44,17 @@ namespace Ff
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_LocalBuffer);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, localBuffer);
         glBindTexture(GL_TEXTURE_2D, 0);
 
-        if (m_LocalBuffer)
-            stbi_image_free(m_LocalBuffer);
+        if (localBuffer)
+            stbi_image_free(localBuffer);
     }
 
     Texture::Texture(ImageFormat format, int width, int height)
-        : m_Format(format)
-        , m_Width(width)
-        , m_Height(height)
+        : format(format)
+        , width(width)
+        , height(height)
     {
         glGenTextures(1, &m_Id);
         glBindTexture(GL_TEXTURE_2D, m_Id);

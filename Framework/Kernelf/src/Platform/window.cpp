@@ -10,9 +10,9 @@
 namespace Ff
 {
     Window::Window(int width, int height, const std::string& windowName)
-        : m_width(width)
-        , m_height(height)
-        , m_windowName(windowName)
+        : m_Width(width)
+        , m_Height(height)
+        , m_WindowName(windowName)
     {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -26,49 +26,49 @@ namespace Ff
             //FFINFO("{}: Triggered: {}", event.getEventStr(), event.eventFormat());
         });
 
-        m_window = glfwCreateWindow(m_width, m_height, m_windowName.c_str(), nullptr, nullptr);
+        m_Window = glfwCreateWindow(m_Width, m_Height, m_WindowName.c_str(), nullptr, nullptr);
 
-        if (m_window == nullptr)
+        if (m_Window == nullptr)
         {
             FFABORT("Failed to create GLFW window");
         }
         FFINFO("Created window");
 
-        glfwMakeContextCurrent(m_window);
-        glfwSetWindowUserPointer(m_window, this);
+        glfwMakeContextCurrent(m_Window);
+        glfwSetWindowUserPointer(m_Window, this);
 
-        glfwSetCursorPosCallback(m_window, mouseMovedCallback);
-        glfwSetCursorEnterCallback(m_window, cursorCallback);
+        glfwSetCursorPosCallback(m_Window, mouseMovedCallback);
+        glfwSetCursorEnterCallback(m_Window, cursorCallback);
 
-        glfwSetScrollCallback(m_window, mouseScrolledCallback);
-        glfwSetMouseButtonCallback(m_window, mouseButtonCallback);
+        glfwSetScrollCallback(m_Window, mouseScrolledCallback);
+        glfwSetMouseButtonCallback(m_Window, mouseButtonCallback);
 
-        glfwSetKeyCallback(m_window, keyCallback);
-        glfwSetCharCallback(m_window, characterCallback);
+        glfwSetKeyCallback(m_Window, keyCallback);
+        glfwSetCharCallback(m_Window, characterCallback);
 
-        glfwSetFramebufferSizeCallback(m_window, windowResizeCallback);
-        glfwSetWindowCloseCallback(m_window, windowCloseCallback);
-        glfwSetWindowPosCallback(m_window, windowPositionCallback);
-        glfwSetWindowFocusCallback(m_window, windowFocusCallback);
-        glfwSetWindowIconifyCallback(m_window, windowIconifyCallback);
-        glfwSetWindowMaximizeCallback(m_window, windowMaximizeCallback);
+        glfwSetFramebufferSizeCallback(m_Window, windowResizeCallback);
+        glfwSetWindowCloseCallback(m_Window, windowCloseCallback);
+        glfwSetWindowPosCallback(m_Window, windowPositionCallback);
+        glfwSetWindowFocusCallback(m_Window, windowFocusCallback);
+        glfwSetWindowIconifyCallback(m_Window, windowIconifyCallback);
+        glfwSetWindowMaximizeCallback(m_Window, windowMaximizeCallback);
     }
 
     Window::~Window()
     {
         FFINFO("Destroyed window");
-        glfwDestroyWindow(m_window);
+        glfwDestroyWindow(m_Window);
     }
 
     bool Window::shouldClose() const
     {
-        return glfwWindowShouldClose(m_window);
+        return glfwWindowShouldClose(m_Window);
     }
 
     void Window::swapBuffers()
     {
         FF_PROFILE_SCOPE();
-        glfwSwapBuffers(m_window);
+        glfwSwapBuffers(m_Window);
     }
 
     void Window::mouseMovedCallback(GLFWwindow* window, double x, double y)
@@ -76,7 +76,7 @@ namespace Ff
         auto& handle = *(Window*)glfwGetWindowUserPointer(window);
         Input::setCursorPosition(glm::vec2((float)x, (float)y));
         MouseMovedEvent event(x, y);
-        handle.functionCallback(event);
+        handle.m_FunctionCallback(event);
     }
 
     void Window::mouseScrolledCallback(GLFWwindow* window, double, double y)
@@ -84,7 +84,7 @@ namespace Ff
         auto& handle = *(Window*)glfwGetWindowUserPointer(window);
         Input::setScrollOffset(y);
         MouseScrolledEvent event(y);
-        handle.functionCallback(event);
+        handle.m_FunctionCallback(event);
     }
 
     void Window::mouseButtonCallback(GLFWwindow* window, int button, int action, int mode)
@@ -100,13 +100,13 @@ namespace Ff
         {
             MouseButtonPressed event(static_cast<MouseButton>(button));
             Input::setButtonState(static_cast<MouseButton>(button), true);
-            handle.functionCallback(event);
+            handle.m_FunctionCallback(event);
         }
         else
         {
             MouseButtonReleased event(static_cast<MouseButton>(button));
             Input::setButtonState(static_cast<MouseButton>(button), false);
-            handle.functionCallback(event);
+            handle.m_FunctionCallback(event);
         }
     }
 
@@ -125,20 +125,20 @@ namespace Ff
             {
                 KeyPressedEvent event(static_cast<Key>(key));
                 Input::setKeyState(static_cast<Key>(key), true);
-                handle.functionCallback(event);
+                handle.m_FunctionCallback(event);
                 break;
             }
             case GLFW_RELEASE:
             {
                 KeyReleasedEvent event(static_cast<Key>(key));
                 Input::setKeyState(static_cast<Key>(key), false);
-                handle.functionCallback(event);
+                handle.m_FunctionCallback(event);
                 break;
             }
             case GLFW_REPEAT:
             {
                 KeyRepeatedEvent event(static_cast<Key>(key));
-                handle.functionCallback(event);
+                handle.m_FunctionCallback(event);
                 break;
             }
         }
@@ -148,30 +148,30 @@ namespace Ff
     {
         auto& handle = *(Window*)glfwGetWindowUserPointer(window);
         TextInputEvent event(codepoint);
-        handle.functionCallback(event);
+        handle.m_FunctionCallback(event);
     }
 
     void Window::windowResizeCallback(GLFWwindow* window, int new_width, int new_height)
     {
         auto& handle = *(Window*)glfwGetWindowUserPointer(window);
         WindowResizedEvent event(new_width, new_height);
-        handle.m_width = new_width;
-        handle.m_height = new_height;
-        handle.functionCallback(event);
+        handle.m_Width = new_width;
+        handle.m_Height = new_height;
+        handle.m_FunctionCallback(event);
     }
 
     void Window::windowCloseCallback(GLFWwindow* window)
     {
         auto& handle = *(Window*)glfwGetWindowUserPointer(window);
         WindowCloseEvent event;
-        handle.functionCallback(event);
+        handle.m_FunctionCallback(event);
     }
 
     void Window::windowPositionCallback(GLFWwindow* window, int xpos, int ypos)
     {
         auto& handle = *(Window*)glfwGetWindowUserPointer(window);
         WindowPositionEvent event(xpos, ypos);
-        handle.functionCallback(event);
+        handle.m_FunctionCallback(event);
     }
 
     void Window::windowFocusCallback(GLFWwindow* window, int focused)
@@ -179,11 +179,11 @@ namespace Ff
         auto& handle = *(Window*)glfwGetWindowUserPointer(window);
         if (focused)
         {
-            handle.functionCallback(WindowFocusEvent());
+            handle.m_FunctionCallback(WindowFocusEvent());
         }
         else
         {
-            handle.functionCallback(WindowUnfocusEvent());
+            handle.m_FunctionCallback(WindowUnfocusEvent());
         }
     }
 
@@ -192,11 +192,11 @@ namespace Ff
         auto& handle = *(Window*)glfwGetWindowUserPointer(window);
         if (iconified)
         {
-            handle.functionCallback(WindowIconifyEvent());
+            handle.m_FunctionCallback(WindowIconifyEvent());
         }
         else
         {
-            handle.functionCallback(WindowRestoredEvent());
+            handle.m_FunctionCallback(WindowRestoredEvent());
         }
     }
 
@@ -205,11 +205,11 @@ namespace Ff
         auto& handle = *(Window*)glfwGetWindowUserPointer(window);
         if (maximized)
         {
-            handle.functionCallback(WindowMaximizeEvent());
+            handle.m_FunctionCallback(WindowMaximizeEvent());
         }
         else
         {
-            handle.functionCallback(WindowRestoredEvent());
+            handle.m_FunctionCallback(WindowRestoredEvent());
         }
     }
 
@@ -218,11 +218,11 @@ namespace Ff
         auto& handle = *(Window*)glfwGetWindowUserPointer(window);
         if (entered)
         {
-            handle.functionCallback(CursorEnterEvent());
+            handle.m_FunctionCallback(CursorEnterEvent());
         }
         else
         {
-            handle.functionCallback(CursorLeftEvent());
+            handle.m_FunctionCallback(CursorLeftEvent());
         }
     }
 

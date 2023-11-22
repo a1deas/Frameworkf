@@ -9,14 +9,14 @@ namespace Ff
 {
 
     ShaderProgram::ShaderProgram(const ShaderProgramSpec& spec)
-        : m_id(createShaderProgram(spec))
+        : m_Id(createShaderProgram(spec))
     {
     }
 
     ShaderProgram::~ShaderProgram()
     {
-        if (m_id != 0)
-            glDeleteProgram(m_id);
+        if (m_Id != 0)
+            glDeleteProgram(m_Id);
     }
 
     std::shared_ptr<ShaderProgram> ShaderProgram::create(const ShaderProgramSpec& spec)
@@ -34,15 +34,15 @@ namespace Ff
     //Ultimate super mega grande common optimization for getUniformLocation();
     int ShaderProgram::getUniformLocation(const char* name) const
     {
-        if (m_uniformLocations.contains(name))
-            return m_uniformLocations[name];
-        int location = glGetUniformLocation(m_id, name);
+        if (m_UniformLocations.contains(name))
+            return m_UniformLocations[name];
+        int location = glGetUniformLocation(m_Id, name);
         if (location == -1)
         {
             FFWARN("Failed to find uniform location for: {}", name);
             return -1;
         }
-        m_uniformLocations[name] = location;
+        m_UniformLocations[name] = location;
         return location;
     }
 

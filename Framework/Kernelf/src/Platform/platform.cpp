@@ -5,7 +5,7 @@
 
 namespace Ff
 {
-    Platform* Platform::Singleton;
+    Platform* Platform::s_Singleton;
 
     Platform::Platform()
     {
@@ -19,7 +19,7 @@ namespace Ff
             abort();
         }
 
-        Singleton = this;
+        s_Singleton = this;
     }
 
     Platform::~Platform()

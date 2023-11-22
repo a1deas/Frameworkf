@@ -6,13 +6,13 @@ namespace Ff
 
     void Timer::start()
     {
-        startTime = glfwGetTime();
+        m_StartTime = glfwGetTime();
     }
 
     void Timer::end()
     {
         double endTime = glfwGetTime();
-        deltaTime = endTime - startTime;
+        m_DeltaTime = endTime - m_StartTime;
     }
 
 } // namespace Ff

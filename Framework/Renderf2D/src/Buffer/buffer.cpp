@@ -39,18 +39,17 @@ namespace Ff
     }
 
     VertexBuffer::VertexBuffer(const VertexBufferSpec& spec)
-        : spec_(spec)
+        : spec(spec)
     {
         FFASSERT(spec.size > 0);
-
-        glGenBuffers(1, &buffer_);
-        glGenVertexArrays(1, &vertexArray_);
+        glGenBuffers(1, &m_Buffer);
+        glGenVertexArrays(1, &m_VertexArray);
 
         uint32_t prevBuffer = getCurrentGLBinding(GL_ARRAY_BUFFER_BINDING);
         uint32_t prevArray = getCurrentGLBinding(GL_VERTEX_ARRAY_BINDING);
 
-        glBindVertexArray(vertexArray_);
-        glBindBuffer(GL_ARRAY_BUFFER, buffer_);
+        glBindVertexArray(m_VertexArray);
+        glBindBuffer(GL_ARRAY_BUFFER, m_Buffer);
         {
             glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(spec.size), nullptr,
                 spec.dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
@@ -67,13 +66,13 @@ namespace Ff
 
     VertexBuffer::~VertexBuffer()
     {
-        if (buffer_)
+        if (m_Buffer)
         {
-            glDeleteBuffers(1, &buffer_);
+            glDeleteBuffers(1, &m_Buffer);
         }
-        if (vertexArray_)
+        if (m_VertexArray)
         {
-            glDeleteVertexArrays(1, &vertexArray_);
+            glDeleteVertexArrays(1, &m_VertexArray);
         }
     }
 
@@ -81,7 +80,7 @@ namespace Ff
     {
         uint32_t prevBuffer = getCurrentGLBinding(GL_ARRAY_BUFFER_BINDING);
 
-        glBindBuffer(GL_ARRAY_BUFFER, buffer_);
+        glBindBuffer(GL_ARRAY_BUFFER, m_Buffer);
         {
             glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
         }
@@ -113,15 +112,15 @@ namespace Ff
     }
 
     IndexBuffer::IndexBuffer(const IndexBufferSpec& spec)
-        : spec_(spec)
+        : spec(spec)
     {
         FFASSERT(spec.size > 0);
 
-        glGenBuffers(1, &buffer_);
+        glGenBuffers(1, &buffer);
 
         uint32_t prevBuffer = getCurrentGLBinding(GL_ELEMENT_ARRAY_BUFFER_BINDING);
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<GLsizeiptr>(spec.size), nullptr,
             spec.dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
 
@@ -130,9 +129,9 @@ namespace Ff
 
     IndexBuffer::~IndexBuffer()
     {
-        if (buffer_)
+        if (buffer)
         {
-            glDeleteBuffers(1, &buffer_);
+            glDeleteBuffers(1, &buffer);
         }
     }
 
@@ -140,7 +139,7 @@ namespace Ff
     {
         uint32_t prevBuffer = getCurrentGLBinding(GL_ELEMENT_ARRAY_BUFFER_BINDING);
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
         {
             glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, data);
         }

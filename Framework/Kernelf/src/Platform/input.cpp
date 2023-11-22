@@ -2,14 +2,14 @@
 
 namespace Ff
 {
-    std::bitset<static_cast<glm::size_t>(MouseButton::LAST)> Input::mouseBitset;
+    std::bitset<static_cast<glm::size_t>(MouseButton::LAST)> Input::m_MouseBitset;
 
-    std::bitset<static_cast<size_t>(Key::KEY_LAST)> Input::keyBitset;
+    std::bitset<static_cast<size_t>(Key::KEY_LAST)> Input::m_KeyBitset;
 
-    glm::vec2 Input::cursorPosition;
+    glm::vec2 Input::m_CursorPosition;
 
-    glm::vec2 Input::mouseOffset;
+    glm::vec2 Input::m_MouseOffset;
 
-    double Input::scrollOffset;
+    double Input::m_ScrollOffset;
 
 } // namespace Ff

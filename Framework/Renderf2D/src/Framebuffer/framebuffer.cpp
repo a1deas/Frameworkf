@@ -8,13 +8,13 @@ namespace Ff
 {
 
     Framebuffer::Framebuffer(const FramebufferSpec& spec)
-        : spec_(spec)
+        : spec(spec)
     {
-        glGenFramebuffers(1, &m_Framebuffer_);
+        glGenFramebuffers(1, &framebuffer);
 
         uint32_t prevBuffer = getCurrentGLBinding(GL_FRAMEBUFFER_BINDING);
 
-        glBindFramebuffer(GL_FRAMEBUFFER, m_Framebuffer_);
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
         std::vector<uint32_t> writeAttachments;
         uint32_t index = 0;
@@ -45,9 +45,9 @@ namespace Ff
 
     Framebuffer::~Framebuffer()
     {
-        if (m_Framebuffer_)
+        if (framebuffer)
         {
-            glDeleteFramebuffers(1, &m_Framebuffer_);
+            glDeleteFramebuffers(1, &framebuffer);
         }
     }
 

@@ -43,9 +43,9 @@ namespace Ff
     }
 
     GraphicsContext::GraphicsContext(Window* window)
-        : m_window(window)
+        : m_Window(window)
     {
-        instance = this;
+        m_Instance = this;
         glfwMakeContextCurrent(window->getWindow());
 
         if (!gladLoadGL())
@@ -69,7 +69,7 @@ namespace Ff
     {
         auto glProgram = std::static_pointer_cast<ShaderProgram>(program);
         glUseProgram(glProgram->getId());
-        boundProgram_ = glProgram;
+        m_BoundProgram = glProgram;
     }
 
     void GraphicsContext::bindVertexBuffer(std::shared_ptr<VertexBuffer> buffer)
@@ -119,46 +119,46 @@ namespace Ff
 
     void GraphicsContext::setConstant(const char* name, float value)
     {
-        FFASSERT(boundProgram_);
-        glProgramUniform1f(boundProgram_->getId(), boundProgram_->getUniformLocation(name), value);
+        FFASSERT(m_BoundProgram);
+        glProgramUniform1f(m_BoundProgram->getId(), m_BoundProgram->getUniformLocation(name), value);
     }
 
     void GraphicsContext::setConstant(const char* name, int32_t value)
     {
-        FFASSERT(boundProgram_);
-        glProgramUniform1i(boundProgram_->getId(), boundProgram_->getUniformLocation(name), value);
+        FFASSERT(m_BoundProgram);
+        glProgramUniform1i(m_BoundProgram->getId(), m_BoundProgram->getUniformLocation(name), value);
     }
 
     void GraphicsContext::setConstant(const char* name, uint32_t value)
     {
-        FFASSERT(boundProgram_);
-        glProgramUniform1i(boundProgram_->getId(), boundProgram_->getUniformLocation(name), value);
+        FFASSERT(m_BoundProgram);
+        glProgramUniform1i(m_BoundProgram->getId(), m_BoundProgram->getUniformLocation(name), value);
     }
 
     void GraphicsContext::setConstant(const char* name, glm::vec2 value)
     {
-        FFASSERT(boundProgram_);
-        glProgramUniform2f(boundProgram_->getId(), boundProgram_->getUniformLocation(name), value.x, value.y);
+        FFASSERT(m_BoundProgram);
+        glProgramUniform2f(m_BoundProgram->getId(), m_BoundProgram->getUniformLocation(name), value.x, value.y);
     }
 
     void GraphicsContext::setConstant(const char* name, glm::vec3 value)
     {
-        FFASSERT(boundProgram_);
-        glProgramUniform3f(boundProgram_->getId(), boundProgram_->getUniformLocation(name), value.x, value.y, value.z);
+        FFASSERT(m_BoundProgram);
+        glProgramUniform3f(m_BoundProgram->getId(), m_BoundProgram->getUniformLocation(name), value.x, value.y, value.z);
     }
 
     void GraphicsContext::setConstant(const char* name, glm::vec4 value)
     {
-        FFASSERT(boundProgram_);
-        glProgramUniform4f(boundProgram_->getId(), boundProgram_->getUniformLocation(name), value.x, value.y, value.z, value.w);
+        FFASSERT(m_BoundProgram);
+        glProgramUniform4f(m_BoundProgram->getId(), m_BoundProgram->getUniformLocation(name), value.x, value.y, value.z, value.w);
     }
 
     void GraphicsContext::setConstant(const char* name, glm::mat4 value)
     {
-        FFASSERT(boundProgram_);
-        glProgramUniformMatrix4fv(boundProgram_->getId(), boundProgram_->getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
+        FFASSERT(m_BoundProgram);
+        glProgramUniformMatrix4fv(m_BoundProgram->getId(), m_BoundProgram->getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
     }
 
-    Ff::GraphicsContext* GraphicsContext::instance;
+    Ff::GraphicsContext* GraphicsContext::m_Instance;
 
 } // namespace Ff

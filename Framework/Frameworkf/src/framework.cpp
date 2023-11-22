@@ -25,18 +25,32 @@ using namespace Ff;
 void init();
 void update();
 
+
+/**
+ * Vertex representation.
+ */
 struct Vertex
 {
+    /** Vertex position. */
     glm::vec3 position{};
+    /** Vertex color. */
     glm::vec3 color{};
+    /** Texture coordinates(0->1) associated with vertex, that specify texture mapping. */
     glm::vec2 uv{};
+    /** Index of texture which applies to the square. */
     float texId{};
 };
 
+/**
+ * Triangle points
+ */
 struct Triangle
 {
+    /** First point. */
     uint32_t p0{};
+    /** Second point counterclockwise. */
     uint32_t p1{};
+    /** Third point counterclockwise. */
     uint32_t p2{};
 };
 
@@ -59,6 +73,7 @@ int main()
     std::shared_ptr<ShaderProgram> shaderProgram = ShaderProgram::create(spec);
 
     Vertex vertices[]{
+        /** { {Coordinates}, { Color }, {Mapping texture coordinates}, {Index of texture} } */
         { { -1.5f, -0.5f, 0.0f }, { 1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f }, 0.0f },
         { { -0.5f, -0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f }, { 1.0f, 0.0f }, 0.0f },
         { { -0.5f,  0.5f, 0.0f }, { 0.0f, 0.0f, 1.0f }, { 1.0f, 1.0f }, 0.0f },
@@ -78,7 +93,7 @@ int main()
         { 6, 7, 4}
     };
 
-    VertexBufferSpec vSpec;
+    VertexBufferSpec vSpec; // !
     vSpec.size = sizeof(vertices);
     vSpec.stride = sizeof(Vertex);
     vSpec.layout.push_back(VertexLayoutElement{ 0, ShaderDataType::float3, offsetof(Vertex, position) });
